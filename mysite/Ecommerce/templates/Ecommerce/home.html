@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+	{% for product in object_list %}
+
+	<style type="text/css">
+		p{
+			font-size: 12px;
+		}
+
+		h2{
+			font-size: 20px;
+		}
+
+		.product-name{
+			height: 26px;
+		}
+
+		.price-container h2{
+			font-size: 40px;
+		}
+
+		.product {
+			background-color: #f2f2f2;
+			border-top: 1px solid #cccccc;
+		}
+
+		.button-container {
+			display: flex;
+			align-items: center;
+			justify-content: end;
+		}
+	</style>
+	
+	<!--<img src="media/static/products_images/7/product_image.png">-->
+	<div class="row product">
+		<div class="col-2">
+			<img style=" height: 180px; width: auto;" src="{{product.image.url}}">
+		</div>
+		<div class="col-6">
+				<div class="row product-name"><h2>{{product.name}}</h1></div>
+				<div class="row"><p>{{product.category}}</p></div>
+				<div class="row"><p></p></div>
+				<div class="row price-container"><h2>${{product.price}}</h2></div>
+				<div class="row"><p>{{product.availability}} left</p></div>
+		</div>
+		<div class="col-3 button-container">
+			<button type="button" class="btn btn-outline-success">Buy Now</button>
+			<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
+			
+		</div>
+	</div>
+	
+		
+	{% endfor %}
+	<script type="text/javascript">
+		function Delete(product_id){
+			if(confirm('Are you sure?')){
+				var url = "{% url 'delete-product' product_id=0 %}".replace('0', product_id)
+				document.location.href= url
+			}
+		}
+
+		
+	</script>
+	
+{% endblock content %}
+
+{% block sidebar %}
+	<button onclick="CreateProduct()" type="button" class="btn btn-outline-danger">Create new Product</button>
+
+	<script type="text/javascript">
+		function CreateProduct(){ //create-product
+			var newUrl = "{% url 'create-product' %}"
+			document.location.href= newUrl
+		}
+	</script>
+{% endblock sidebar %}
+
+
