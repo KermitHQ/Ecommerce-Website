@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="{% static 'styles/style.css' %}" />
 </head>
 <body>
-	<div class="container-fluid">
+	<div class="container-fluid" style="padding: 0;">
 		<div class="row border pt-2 pb-2">
 			<div class="col" align="center">
 				<a href="{% url 'home' %}">Home</a>
@@ -32,11 +32,11 @@
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col-sm" align="center">
+		<div class="d-flex flex-row">
+			<div class="col-sm" align="center" >
 				<!-- space filler --->
 			</div>
-			<div class="col-6 main-content">
+			<div class="col-8 main-content">
 				{% block content %}
 				{% endblock content %}
 			</div>

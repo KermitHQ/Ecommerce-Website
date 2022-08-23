@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-	{% for product in object_list %}
+	
 
 	<style type="text/css">
 		p{
@@ -13,6 +13,21 @@
 
 		.product-name{
 			height: 26px;
+		}
+
+		.product-data{
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			max-height: 180px;
+			padding-left: 10px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			height: 180px;
+		}
+
+		.product-data-item{
+			height: auto;
 		}
 
 		.price-container h2{
@@ -33,28 +48,82 @@
 		.r-sidebar {
 			padding-top: 100px;
 		}
+
+		.left-sidebar {
+
+			border: 1px solid black;
+			min-height: 100%;
+			background-color: red;
+			padding: 0;
+		}
+
+		.product-list-item{
+			display: flex;
+			flex-direction: row;
+			max-height: 180px;
+		
+			border-bottom: 1px solid #cccccc;
+		}
+
+		.product-data-item h2{
+			font-size: 24px;
+		}
+
+		.kurwa {
+			width: 100%;
+			max-height: 100%;
+		}
+
+		.product-footer {	
+			padding-right: 10%;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: flex-end;
+		}
 	</style>
 	
-	<!--<img src="media/static/products_images/7/product_image.png">-->
-	<div class="row product">
-		<div class="col-2">
-			<img style=" height: 180px; width: auto;" src="{{product.image.url}}">		
+	{% for product in object_list %}
+	<div class="product-list-item">
+		<div class="product-image">
+			<img style=" height: 180px; width: auto;" src="{{product.image.url}}">
 		</div>
-		<div class="col-6" style="padding-left: 50px;">
-				<div class="row product-name"><h2>{{product.name}}</h1></div>
-				<div class="row"><p>{{product.category}}</p></div>
-				<div class="row"><p></p></div>
-				<div class="row price-container"><h2>${{product.price}}</h2></div>
-				<div class="row"><p>{{product.availability}} left</p></div>
+		<div class="kurwa">
+			<div class="product-data">
+				<div class="product-data-item">
+					<h2>{{product.name|title}}</h2>
+				</div>
+				<div class="product-data-item">
+					<p><a href="#"></a>{{product.category}}</a></p>
+				</div>
+				<div class="product-data-item">
+					<h2>${{product.price}}</h2>
+				</div>
+				
+				<div class="product-data-item">
+					<div class="product-footer " >
+						<div >
+							<br>
+							<p>{{product.availability}} left</p>
+						</div>
+						<div>
+							<p></p>
+						</div>
+						<div>
+							<button type="button" class="btn btn-outline-dark">Add To Cart</button>
+							{% if user.is_superuser %}
+								<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
+							{% endif %}
+						</div>
+							
+					</div>
+				</div>
+				
+				
+			</div>
 		</div>
-		<div class="col-3 button-container">
-			<button type="button" class="btn btn-outline-success">Buy Now</button>
-			{% if user.is_superuser %}
-				<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
-			{% endif %}
-		</div>
+
 	</div>
-	
 		
 	{% endfor %}
 	<script type="text/javascript">
@@ -64,8 +133,6 @@
 				document.location.href= url
 			}
 		}
-
-		
 	</script>
 	
 {% endblock content %}
@@ -97,5 +164,11 @@
 		}
 	</script>
 {% endblock sidebar %}
+
+{% block leftsidebar %}
+	<div class="left-sidebar">
+		
+	</div>
+{% endblock leftsidebar %}
 
 

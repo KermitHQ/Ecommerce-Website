@@ -1,5 +1,51 @@
-<form method="POST">
-	{% csrf_token %}
-	{{form}}
-	<button type="submit">save</button>	
-</form>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<style type="text/css">
+		.form-container {
+			padding-top: 100px;
+		}
+
+		.form-element{
+			padding-top: 15px;
+		}
+
+		.form-element input{
+			text-align: center;
+		}
+
+		.form-title{
+			text-align: center;
+			vertical-align: middle;
+		}
+
+		.button-container{
+		display: flex;
+		justify-content: center;
+
+		}
+
+	</style>
+
+	<div class="form-container">
+		<form method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="form-title">
+				<h1>Create New Category</h1>
+			</div>
+			<div class="form-element">
+				{{form.name|as_crispy_field}}
+			</div class="form-element">
+			
+			<br>
+			<div class="button-container">
+				<button type="submit" class="btn btn-outline-success">Create Category</button>
+			</div>
+			
+		</form>
+	</div>
+	
+	
+{% endblock content %}
+
+
