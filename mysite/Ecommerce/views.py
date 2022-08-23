@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 from .forms import ProductForm
 
 
+
 def CartView(request):
 	pass
 
@@ -17,23 +18,31 @@ class ProductListView(ListView):
 	
 	template_name = "Ecommerce/home.html"
 
+
 def ProductCreationView(request):
 	context = {}
 	form = ProductForm()
-	if request.method == 'POST':
-		form = ProductForm(request.POST, request.FILES)
-		if form.is_valid():
-			form.save()
-			return redirect('home')
+	if request.user.is_superuser:
+		if request.method == 'POST':
+			form = ProductForm(request.POST, request.FILES)
+			if form.is_valid():
+				form.save()
+				return redirect('home')
+			else:
+				print('form is not valid')
 		else:
-			print('form is not valid')
+			print('request method is not correct')
 	else:
-		print('request method is not correct')
+		print("You are not allowed here")
+		return redirect('home')
 	context['form'] = form
 
 	return render(request, "Ecommerce/create_product.html", context)
 
 def ProductDeleteView(request, product_id):
-	product = get_object_or_404(Product, id=product_id)
-	product.delete()
+	if request.user.is_superuser:
+		product = get_object_or_404(Product, id=product_id)
+		product.delete()
+	else:
+		print("You are not allowed here")
 	return redirect('home')

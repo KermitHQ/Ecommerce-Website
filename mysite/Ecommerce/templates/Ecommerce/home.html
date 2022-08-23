@@ -49,8 +49,9 @@
 		</div>
 		<div class="col-3 button-container">
 			<button type="button" class="btn btn-outline-success">Buy Now</button>
-			<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
-			
+			{% if user.is_superuser %}
+				<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
+			{% endif %}
 		</div>
 	</div>
 	
@@ -71,9 +72,11 @@
 
 {% block sidebar %}
 	<div class="r-sidebar">
+		{% if user.is_authenticated and user.is_superuser %}
 		<div id="add-product-button">
 			<button onclick="CreateProduct()" type="button" class="btn btn-outline-danger">Create new Product</button>	
 		</div>
+		{% endif %}
 	</div>
 	
 	
