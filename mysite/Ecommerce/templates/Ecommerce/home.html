@@ -29,6 +29,10 @@
 			align-items: center;
 			justify-content: end;
 		}
+
+		.r-sidebar {
+			padding-top: 100px;
+		}
 	</style>
 	
 	<!--<img src="media/static/products_images/7/product_image.png">-->
@@ -36,7 +40,7 @@
 		<div class="col-2">
 			<img style=" height: 180px; width: auto;" src="{{product.image.url}}">		
 		</div>
-		<div class="col-6">
+		<div class="col-6" style="padding-left: 50px;">
 				<div class="row product-name"><h2>{{product.name}}</h1></div>
 				<div class="row"><p>{{product.category}}</p></div>
 				<div class="row"><p></p></div>
@@ -66,8 +70,13 @@
 {% endblock content %}
 
 {% block sidebar %}
-	<button onclick="CreateProduct()" type="button" class="btn btn-outline-danger">Create new Product</button>
-
+	<div class="r-sidebar">
+		<div id="add-product-button">
+			<button onclick="CreateProduct()" type="button" class="btn btn-outline-danger">Create new Product</button>	
+		</div>
+	</div>
+	
+	
 	<script type="text/javascript">
 		function CreateProduct(){ //create-product
 			var newUrl = "{% url 'create-product' %}"

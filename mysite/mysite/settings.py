@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'Ecommerce',
     'Account',
     
+    'crispy_forms',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_USER_MODEL =   'Account.Account'
 

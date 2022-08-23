@@ -52,7 +52,7 @@ class Product(models.Model):
 	#def get_url(self):
 	#	return getProductImageURL(self.pk)
 
-	image = models.ImageField(upload_to=getImageURL, default="media/static/products_images/default.png" )
+	image = models.ImageField(upload_to=getImageURL, default="static/default.png" )
 
 	
 

@@ -1,11 +1,52 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-	<form method="POST" enctype="multipart/form-data">
-		{% csrf_token %}
-		{{ form }}
-		<button type="submit">submit</button>
-	</form>
+	<style type="text/css">
+		.form-container {
+			padding-top: 100px;
+		}
+	</style>
+
+	<div class="form-container">
+		<form method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div>
+				{{form.name|as_crispy_field}}
+			</div>
+			<div class="category-choice">
+				{{form.category|as_crispy_field}}
+			</div>
+			<div>
+				{{form.availability|as_crispy_field}}
+			</div>
+			<div>
+				{{form.price|as_crispy_field}}
+			</div>
+
+			
+
+			<div>
+				{{form.image}}
+			</div>
+			<br>
+			<button type="submit" class="btn btn-outline-success">Create product</button>
+		</form>
+	</div>
 	
+	
+
+	
+
+	<script type="text/javascript">
+		function addClasses(){
+			var select = document.querySelector('.category-choice select')
+			select.classList.add("custom-select",  "my-1", "mr-sm-2")
+			select.id = "inlineFormCustomSelectPref"
+		}
+
+		window.onload = addClasses()
+		
+	</script>
 {% endblock content %}
 
 
