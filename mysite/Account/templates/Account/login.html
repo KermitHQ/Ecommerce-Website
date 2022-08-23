@@ -1,6 +1,79 @@
-<form method="POST">
-	{% csrf_token %}
-	{{form}}
-	<button type="submit">Login</button>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style type="text/css">
+
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+	.login-form-container{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin: auto;
+		padding: 0;
+		width: 60%;
+		padding-top: 100px;
+	}
+	.login-form-container input{
+		text-align: center;
+		
+	}
+
+	.login-form-username input{
+		text-align: center;
+
+		
+	}
+
 	
-</form>
+
+	.login-form-username{
+		
+		flex: 1;
+		padding-bottom: 20px;
+	}
+
+	.login-form-password{
+		
+		flex: 2;
+	}
+
+	.button-container{
+		display: flex;
+		justify-content: center;
+	}
+
+	.form-title {
+		text-align: center;
+		vertical-align: middle;
+	}
+</style>
+
+<div class="login-form-container">
+	<form method="POST">
+		{% csrf_token %}
+		<div class="form-title">
+			<h1>Login</h1>
+		</div>
+		<div class="login-form-username">{{form.username|as_crispy_field}}</div>
+		<div class="login-form-password">{{form.password|as_crispy_field}}</div>
+		
+
+		<br>
+		<div class="button-container">
+			<button type="submit" class="btn btn-outline-success">Login</button>
+		</div>
+		
+		
+	</form>
+</div>
+
+
+{% endblock content %}
