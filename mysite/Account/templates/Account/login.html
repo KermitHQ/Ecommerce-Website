@@ -65,7 +65,7 @@ input:-webkit-autofill:active{
 		<div class="login-form-username">{{form.username|as_crispy_field}}</div>
 		<div class="login-form-password">{{form.password|as_crispy_field}}</div>
 		
-
+		<small> <a href="{% url 'register' %}">Dont't have an account ? sign up</a> </small>
 		<br>
 		<div class="button-container">
 			<button type="submit" class="btn btn-outline-success">Login</button>

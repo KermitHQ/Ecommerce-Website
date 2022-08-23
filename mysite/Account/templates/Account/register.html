@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<form method="POST">
+
+	<style type="text/css">
+		.registration-form{
+			display: flex;
+			flex-direction: column;
+			width: 60%;
+
+
+			justify-content: center;
+			margin: auto;
+			padding: 0;
+			
+			padding-top: 100px;
+
+		}
+
+		.field{
+			
+			padding-top: 30px;
+			text-align: center;
+
+
+		}
+
+		.password1-field input{
+			text-align: center;
+		}
+
+		.password1-field {
+			padding-top: 30px;
+		}
+		
+		
+
+		.field input{
+			text-align: center;
+		}
+
+		.register-title{
+			text-align: center;
+		}
+	</style>
+	{% csrf_token %}
+	<div class="registration-form">
+		<div class="register-title">
+			<h1>Sign Up</h1>
+		</div>
+		
+		<form method="POST">
+			<div class="field">
+				{{form.username|as_crispy_field}}
+			</div>
+			<div class="field">
+				{{form.email|as_crispy_field}}
+			</div>
+			<div class="password1-field">
+				{{form.password1|as_crispy_field}}
+			</div>
+			<div class="password1-field">
+				{{form.password2|as_crispy_field}}
+			</div>
+			
+			<div class="field">
+				<button type="submit" class="btn btn-outline-success">Sign Up</button>
+			</div>
+		</form>
+	</div>
+	
+</form>
+
+
+{% endblock content %}
+
