@@ -1,6 +1,8 @@
 from django.db import models
 from Account.models import Account
 import os
+from .utils import getProductImageURL
+
 
 
 class Order(models.Model):
@@ -16,11 +18,27 @@ class Category(models.Model):
 	def __str__(self):
 		return self.name
 
-def getImageURL(self, filename):
-	path = "media/products_images/" + str(self.pk) + "/product_image.png"
-	return path
 
-
+def getFileNumber():
+	queryset = Product.objects.all().order_by('pk')
+	if queryset:
+		last = queryset.last()
+		last_id = last.id
+		file_number = last_id+1
+		return str(file_number)
+	else:
+		file_number=1
+		return str(file_number)
+	
+def getImageURL(instance, filename):
+	path = os.path.join("products_images/{}/product_image.png".format(getFileNumber()))
+	print(path)
+	if os.path.isfile("media/" + path):
+		print("image with this id already exist, ")
+		os.remove("media/" + path)
+		return path
+	else:
+		return path
 
 class Product(models.Model):
 	name = models.CharField(max_length=200)
@@ -28,13 +46,19 @@ class Product(models.Model):
 	availability = models.IntegerField()
 	price = models.DecimalField(max_digits=5, decimal_places=2)
 
-	image = models.ImageField(default="media/static/products_images/default.png", upload_to=getImageURL)
+	
+	
 
 	def __str__(self):
 		return self.name
 
 	def get_product_image_filename(self):
 		return str(self.image)[str(self.image).index(f'product_images/{self.pk}'):]
+
+	def get_url(self):
+		return getProductImageURL(self.pk)
+
+	image = models.ImageField(upload_to=getImageURL, default="media/static/products_images/default.png" )
 
 	
 
