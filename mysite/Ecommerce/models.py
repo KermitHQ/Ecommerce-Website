@@ -1,8 +1,6 @@
 from django.db import models
 from Account.models import Account
 import os
-from .utils import getProductImageURL
-
 
 
 class Order(models.Model):
@@ -22,8 +20,7 @@ class Category(models.Model):
 def getFileNumber():
 	queryset = Product.objects.all().order_by('pk')
 	if queryset:
-		last = queryset.last()
-		last_id = last.id
+		last_id = len(queryset)
 		file_number = last_id+1
 		return str(file_number)
 	else:
@@ -46,17 +43,14 @@ class Product(models.Model):
 	availability = models.IntegerField()
 	price = models.DecimalField(max_digits=5, decimal_places=2)
 
-	
-	
-
 	def __str__(self):
 		return self.name
 
-	def get_product_image_filename(self):
-		return str(self.image)[str(self.image).index(f'product_images/{self.pk}'):]
+	#def get_product_image_filename(self):
+	#	return str(self.image)[str(self.image).index(f'product_images/{self.pk}'):]
 
-	def get_url(self):
-		return getProductImageURL(self.pk)
+	#def get_url(self):
+	#	return getProductImageURL(self.pk)
 
 	image = models.ImageField(upload_to=getImageURL, default="media/static/products_images/default.png" )
 
