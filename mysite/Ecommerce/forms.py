@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Product
+from .models import Product, Category
 from django import forms
 
 
@@ -17,3 +17,13 @@ class ProductForm(forms.ModelForm):
 		self.fields[ 'availability' ].label=""
 		self.fields[ 'price' ].widget.attrs[ 'placeholder' ]="Set price"
 		self.fields[ 'price' ].label=""
+
+class CategoryForm(forms.ModelForm):
+	class Meta:
+		model = Category
+		fields = '__all__'
+
+	def __init__(self, *args, **kwargs):
+		super(CategoryForm, self).__init__(*args, **kwargs)
+		self.fields['name'].widget.attrs['placeholder']="Enter category's name"
+		self.fields['name'].label=""

@@ -76,6 +76,11 @@
 		<div id="add-product-button">
 			<button onclick="CreateProduct()" type="button" class="btn btn-outline-danger">Create new Product</button>	
 		</div>
+
+		<div>
+			<button onclick="CreateCategory()" type="button" class="btn btn-outline-danger">Create new Category</button>	
+		</div>
+
 		{% endif %}
 	</div>
 	
@@ -83,6 +88,11 @@
 	<script type="text/javascript">
 		function CreateProduct(){ //create-product
 			var newUrl = "{% url 'create-product' %}"
+			document.location.href= newUrl
+		}
+
+		function CreateCategory(){ //create-product
+			var newUrl = "{% url 'create-category' %}"
 			document.location.href= newUrl
 		}
 	</script>
