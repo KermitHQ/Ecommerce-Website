@@ -50,11 +50,20 @@
 		}
 
 		.left-sidebar {
-
-			border: 1px solid black;
+			display: flex;
+			flex-direction: column;
 			min-height: 100%;
-			background-color: red;
 			padding: 0;
+		}
+
+		.category-list-item{
+			height: 30px;
+			border: 1px solid black;
+		}
+
+		.category-list-header{
+			height: 30px;
+			border: 1px solid black;
 		}
 
 		.product-list-item{
@@ -81,6 +90,21 @@
 			justify-content: space-between;
 			align-items: flex-end;
 		}
+
+		.hidden{
+			display: none;
+		}
+
+		.set-price{
+			padding-right: 20px;
+			padding-left: 20px;
+			padding-top: 40px;
+		}
+
+		.price input{
+			text-align:center
+		}
+
 	</style>
 	
 	{% for product in object_list %}
@@ -166,9 +190,88 @@
 {% endblock sidebar %}
 
 {% block leftsidebar %}
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+
 	<div class="left-sidebar">
-		
+		<div class="category-list-header">
+			<h2><a href="#" onclick="toggleCategories()">Categories:</a></h2>
+		</div>
+		<div id="category-list" class="hidden">
+			{% for category in categories %}
+				<div class="category-list-item">
+					<h2><a href="{% url 'home' category=category.name %}">{{category.name}}</a></h2>
+				</div>
+			{% endfor %}
+		</div>
+	
+
+	
+
+	
+		<div class="set-price">
+			<div class="price">
+				<p>
+					<label for="amount">Price range:</label>
+					<br>
+					<input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+				</p>
+			</div>
+			
+			<div id="slider-range"></div>
+			<button onclick="check_priceRange()" > check</button>
+		</div>
 	</div>
+ 
+
+	<script>
+		$( function() {
+			let params = new URLSearchParams(location.search);
+			let min_price = params.get('price_from')
+			$( "#slider-range" ).slider({
+				range: true,
+				min:0,
+				
+				max: 500,
+				values: [ 0, 500 ],
+				slide: function( event, ui ){
+					$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+				}
+			});
+			$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+			" - $" + $( "#slider-range" ).slider( "values", 1 ) );
+		});
+
+		function check_priceRange() {
+			var a = $( "#slider-range" ).slider("values", 0);
+			var b = $( "#slider-range" ).slider("values", 1);
+			var link = "?price_from=a&price_to=b".replace("a", a).replace("b", b)
+			window.location.href = link
+			console.log(a)
+			console.log(b)
+		}
+
+	</script>
+
+	<script type="text/javascript">
+		var categoriesStatus = false
+		var categories = document.getElementById('category-list')
+
+		function toggleCategories(){
+			console.log(categories)
+			console.log(categoriesStatus)
+			if(categoriesStatus == false){
+				categoriesStatus=true
+				categories.classList.remove('hidden')
+			}
+			else{
+				categoriesStatus=false
+				categories.classList.add('hidden')
+			}
+		}
+	</script>
 {% endblock leftsidebar %}
 
 

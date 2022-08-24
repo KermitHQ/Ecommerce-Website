@@ -10,10 +10,21 @@ def CartView(request):
 
 def AvailableItemsList(request, category=None):
 	context = {}
+	categories = Category.objects.all()
+	context['categories'] = categories
+	min_price = request.GET.get('price_from', '') or None
+	max_price = request.GET.get('price_to', '') or None
 	if category is not None:
 		object_list = Product.objects.all().filter(category__name=category)
 	else:
 		object_list = Product.objects.all()
+
+	if min_price is not None:
+		object_list = object_list.filter(price__gte=min_price)
+
+	if min_price is not None:
+		object_list = object_list.filter(price__lte=max_price)
+
 	context['object_list'] = object_list 
 
 	return render(request,"Ecommerce/home.html", context)
