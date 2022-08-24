@@ -14,6 +14,7 @@ def AvailableItemsList(request, category=None):
 	context['categories'] = categories
 	min_price = request.GET.get('price_from', '') or None
 	max_price = request.GET.get('price_to', '') or None
+	sorted = request.GET.get('sorted', '') or None
 	if category is not None:
 		object_list = Product.objects.all().filter(category__name=category)
 	else:
@@ -24,6 +25,15 @@ def AvailableItemsList(request, category=None):
 
 	if min_price is not None:
 		object_list = object_list.filter(price__lte=max_price)
+
+	if sorted is not None:
+		print(sorted)
+		if sorted == 'reverse':
+			object_list = object_list.order_by('-price')
+		elif sorted == 'normal':
+			object_list = object_list.order_by('price')
+
+	
 
 	context['object_list'] = object_list 
 

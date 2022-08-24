@@ -71,7 +71,7 @@
 			flex-direction: row;
 			max-height: 180px;
 		
-			border-bottom: 1px solid #cccccc;
+			
 		}
 
 		.product-data-item h2{
@@ -108,7 +108,7 @@
 	</style>
 	
 	{% for product in object_list %}
-	<div class="product-list-item">
+	<div class="product-list-item shadow bg-white rounded">
 		<div class="product-image">
 			<img style=" height: 180px; width: auto;" src="{{product.image.url}}">
 		</div>
@@ -201,7 +201,7 @@
 		</div>
 		<div id="category-list" class="hidden">
 			{% for category in categories %}
-				<div class="category-list-item">
+				<div class="category-list-item ">
 					<h2><a href="{% url 'home' category=category.name %}">{{category.name}}</a></h2>
 				</div>
 			{% endfor %}
@@ -223,6 +223,9 @@
 			<div id="slider-range"></div>
 			<button onclick="check_priceRange()" > check</button>
 		</div>
+
+		<button onclick="sort(0)">sort normal</button>
+		<button onclick="sort(1)">sort reverse</button>
 	</div>
  
 
@@ -254,6 +257,7 @@
 			" - $" + $( "#slider-range" ).slider( "values", 1 ) );
 		});
 
+
 		function check_priceRange() {
 			var a = $( "#slider-range" ).slider("values", 0);
 			var b = $( "#slider-range" ).slider("values", 1);
@@ -263,6 +267,52 @@
 			console.log(b)
 		}
 
+		function sort(reverse){
+			var partToReplace
+			var link = window.location.href
+			if((link).includes("sorted")){
+				console.log("already sorted")
+				
+
+				if((link).includes("sorted=normal")){
+					if(reverse==true){
+						var newLink = window.location.href.replace("sorted=normal", "sorted=reverse")
+						console.log(newLink)
+						window.location.href = newLink
+					}
+				}
+				if((link).includes("sorted=reverse")){
+					if(reverse==false){
+						var newLink = window.location.href.replace("sorted=reverse", "sorted=normal")
+						console.log(newLink)
+						window.location.href = newLink
+					}
+				}
+				
+			}
+			else{
+				if(reverse==false){
+					if((window.location.href).includes("?")){
+						var link = "&sorted=None".replace("None", "normal")
+						window.location.href += link
+						}
+					else{
+						var link = "?sorted=None".replace("None", "normal")
+						window.location.href = link
+					}
+				}
+				else{
+					if((window.location.href).includes("?")){
+						var link = "&sorted=None".replace("None", "reverse")
+						window.location.href += link
+						}
+					else{
+						var link = "?sorted=None".replace("None", "reverse")
+						window.location.href = link
+					}
+				}
+			}	
+		}
 	</script>
 
 	<script type="text/javascript">
