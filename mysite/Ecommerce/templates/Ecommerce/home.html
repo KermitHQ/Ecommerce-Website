@@ -230,12 +230,22 @@
 		$( function() {
 			let params = new URLSearchParams(location.search);
 			let min_price = params.get('price_from')
+			let max_price = params.get('price_to')
+
+			if(max_price == null){
+				max_price = 500;
+			}
+			if(min_price == null){
+				min_price = 0;
+			}
+
+			console.log(max_price)
 			$( "#slider-range" ).slider({
 				range: true,
 				min:0,
 				
 				max: 500,
-				values: [ 0, 500 ],
+				values: [ min_price, max_price ],
 				slide: function( event, ui ){
 					$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
 				}
