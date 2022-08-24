@@ -1,45 +1,74 @@
 {% extends 'base.html' %}
 {% block content %}
-	{% for ordered_product in ordered_products %}
-		<div>
-			{{ordered_product.item.name}}
-			{{ordered_product.item.category}}
-			{{ordered_product.quantity}}
-			
-		</div>
-	{% endfor %}
+	
 
-	{% for ordered_product in ordered_products %}
-	<div class="product-list-item shadow bg-white rounded">
-		<div class="product-image">
-			<img style=" height: 180px; width: auto;" src="{{product.image.url}}">
+	<style type="text/css">
+		.cart-data{
+			min-height: 100px;
+			padding: 20px;
+			margin-bottom: 20px;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.product-data{
+			padding-bottom: 20px;
+		}
+
+		.user-data p{
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+
+		.cost {
+			padding-top: 20px;
+
+		}
+		.product-data p{
+			margin-bottom: 0;
+		}
+
+		.order-data{
+			margin-top: 20px;
+			display: flex;
+			flex-direction: column;
+			padding: 20px;
+			margin-bottom: 20px;
+		}
+	</style>
+
+	
+
+	<div class="order-data shadow bg-white rounded">
+		<div>
+			<h2>Order #{{order.id}}</h2>
 		</div>
-		<div class="kurwa">
+		<div class="user-data">
+			<p>Made By: {{order.user.username}}</p>
+			<p>Contact: {{order.user}}</p>
+			<p>Created: {{order.created|date:"d M Y - G:i"}}
+			<p>Items: {{ordered_products.count}}</p>
+		</div>
+	</div>
+
+
+
+	{% for product in ordered_products %}
+		<div class="cart-data shadow bg-white rounded">
+			<div class="item">
+				<h2>{{product.item.name}}</h2>
+			</div>
 			<div class="product-data">
-				<div class="product-data-item">
-					<h2>{{ordered_product.item.name|title}} x{{ordered_product.quantity}}</h2>
-				</div>
-				<div class="product-data-item">
-					<p>{{ordered_product.item.category}}</p>
-				</div>
-				<div class="product-data-item">
-					<h2>Total price $ {{ordered_product.get_total_price }}</h2>
-				</div>
-				
-				<div class="product-data-item">
-					<div class="product-footer " >
-						
-						
-							
-					</div>
-				</div>
-				
-				
+				<p>Product: {{product.item.name}}</p>
+				<p>Price: ${{product.item.price}}</p>
+				<p>Quantity: {{product.quantity}}</p>
+			</div>
+			<div class="cost">
+				<p>Total: ${{product.get_total_price}}</p>
 			</div>
 		</div>
-
-	</div>
-		
+			
 	{% endfor %}
 
+	<h1>TOTAL: ${{total_price}}</h1>
 {% endblock content %}

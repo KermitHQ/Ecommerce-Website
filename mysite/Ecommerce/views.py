@@ -10,6 +10,12 @@ def CartView(request):
 	order = Order.objects.get(user=request.user)
 	ordered_products = OrderItem.objects.filter(order=order)
 	
+	total_price = 0
+	for product in ordered_products:
+		total_price += product.get_total_price()
+
+	context['total_price'] = total_price
+	context['order'] = order
 	context['ordered_products'] = ordered_products
 	return render(request, "Ecommerce/cart.html", context)
 

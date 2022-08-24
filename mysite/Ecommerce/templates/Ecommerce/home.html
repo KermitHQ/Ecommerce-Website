@@ -174,8 +174,8 @@
 							<p></p>
 						</div>
 						<div>
-							<a href="{% url 'add-to-cart' product_id=product.id %}">Add</a>
-							<button type="button" class="btn btn-outline-dark">Add To Cart</button>
+							
+							<button onclick="AddToCart({{product.id}})" type="button" class="btn btn-outline-dark">Add To Cart</button>
 							{% if user.is_superuser %}
 								<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
 							{% endif %}
@@ -225,6 +225,11 @@
 
 		function CreateCategory(){ //create-product
 			var newUrl = "{% url 'create-category' %}"
+			document.location.href= newUrl
+		}
+		
+		function AddToCart(product_id){
+			var newUrl = "{% url 'add-to-cart' product_id=0 %}".replace('0', product_id)
 			document.location.href= newUrl
 		}
 	</script>

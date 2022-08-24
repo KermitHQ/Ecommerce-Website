@@ -6,6 +6,7 @@ import os
 class Order(models.Model):
 	user = models.ForeignKey(Account, on_delete=models.CASCADE)
 	is_active = models.BooleanField(default=True)
+	created = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
 		return (" {} active {}" if self.is_active else "{} not active {}").format(self.user.username, self.id)
