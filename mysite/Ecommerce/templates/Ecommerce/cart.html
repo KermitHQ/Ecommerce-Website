@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+	{% for ordered_product in ordered_products %}
+		<div>
+			{{ordered_product.item.name}}
+			{{ordered_product.item.category}}
+			{{ordered_product.quantity}}
+			
+		</div>
+	{% endfor %}
+
+	{% for ordered_product in ordered_products %}
+	<div class="product-list-item shadow bg-white rounded">
+		<div class="product-image">
+			<img style=" height: 180px; width: auto;" src="{{product.image.url}}">
+		</div>
+		<div class="kurwa">
+			<div class="product-data">
+				<div class="product-data-item">
+					<h2>{{ordered_product.item.name|title}} x{{ordered_product.quantity}}</h2>
+				</div>
+				<div class="product-data-item">
+					<p>{{ordered_product.item.category}}</p>
+				</div>
+				<div class="product-data-item">
+					<h2>Total price $ {{ordered_product.get_total_price }}</h2>
+				</div>
+				
+				<div class="product-data-item">
+					<div class="product-footer " >
+						
+						
+							
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+
+	</div>
+		
+	{% endfor %}
+
+{% endblock content %}

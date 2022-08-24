@@ -1,12 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Category
+from .models import Product, Category, Order, OrderItem
 from django.views.generic.list import ListView
 from .forms import ProductForm, CategoryForm
 from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def CartView(request):
-	pass
+	context = {}
+	order = Order.objects.get(user=request.user)
+	ordered_products = OrderItem.objects.filter(order=order)
+	
+	context['ordered_products'] = ordered_products
+	return render(request, "Ecommerce/cart.html", context)
+
 
 def AvailableItemsList(request, category=None):
 	context = {}
@@ -82,3 +88,24 @@ def CategoryCreationView(request):
 	context['form'] = form
 
 	return render(request, "Ecommerce/create_category.html", context)
+
+@login_required
+def AddToCartView(request, product_id):
+	#order = Order.objects.get_or_create(user=request.user)
+	try:
+		order = Order.objects.get(user=request.user, is_active=True)
+	except Order.DoesNotExist:
+		order = Order.objects.create(user=request.user, is_active=True)
+		order.save()
+	item = Product.objects.get(id=product_id)
+	print()
+	try:
+		print(order)
+		print(item)
+		print("sadasd")
+		orderItem = OrderItem.objects.get(order=order, item=item)
+		orderItem.quantity += 1
+		orderItem.save()
+	except OrderItem.DoesNotExist:
+		orderItem = OrderItem.objects.create(order=order, item=item, quantity=1)
+	return redirect('home')

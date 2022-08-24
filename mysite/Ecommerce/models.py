@@ -10,6 +10,8 @@ class Order(models.Model):
 	def __str__(self):
 		return (" {} active {}" if self.is_active else "{} not active {}").format(self.user.username, self.id)
 
+
+
 class Category(models.Model):
 	name = models.CharField(max_length=200)
 
@@ -65,6 +67,10 @@ class OrderItem(models.Model):
 		
 		ordered_item = self.item
 		self.item.availability -= self.quantity
+
+	def get_total_price(self):
+		price = self.item.price * self.quantity
+		return price
 
 	def __str__(self):
 		return ("{}'s' order id: {} - {} - {}x".format(self.order.user.username, self.order.id, self.item, self.quantity))
