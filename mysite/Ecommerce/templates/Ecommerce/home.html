@@ -94,7 +94,7 @@
 					<h2>{{product.name|title}}</h2>
 				</div>
 				<div class="product-data-item">
-					<p><a href="#"></a>{{product.category}}</a></p>
+					<p><a href="{% url 'home' category=product.category %}">{{product.category}}</a></p>
 				</div>
 				<div class="product-data-item">
 					<h2>${{product.price}}</h2>

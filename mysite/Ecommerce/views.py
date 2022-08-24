@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product
+from .models import Product, Category
 from django.views.generic.list import ListView
 from .forms import ProductForm, CategoryForm
 from django.contrib.auth.decorators import login_required
@@ -8,15 +8,16 @@ from django.contrib.auth.decorators import login_required
 def CartView(request):
 	pass
 
-def AvailableItemsList(request):
-	items = Product.objects.filter(availability>0)
+def AvailableItemsList(request, category=None):
+	context = {}
+	if category is not None:
+		object_list = Product.objects.all().filter(category__name=category)
+	else:
+		object_list = Product.objects.all()
+	context['object_list'] = object_list 
 
-	return render(request, )
+	return render(request,"Ecommerce/home.html", context)
 
-class ProductListView(ListView):
-	model = Product
-	
-	template_name = "Ecommerce/home.html"
 
 @login_required
 def ProductCreationView(request):
