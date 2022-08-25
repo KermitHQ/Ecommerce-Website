@@ -35,6 +35,20 @@
 			padding: 20px;
 			margin-bottom: 20px;
 		}
+
+		.product-quantity{
+			display: flex;
+			flex-direction: row;
+		}	
+
+		.quantity p{
+			margin-top: 12px;
+			padding-right: 5px;
+		}
+
+		.hidden{
+			display: none;
+		}
 	</style>
 
 	
@@ -51,24 +65,132 @@
 		</div>
 	</div>
 
-
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
 	{% for product in ordered_products %}
-		<div class="cart-data shadow bg-white rounded">
-			<div class="item">
-				<h2>{{product.item.name}}</h2>
+		{% if product %}
+			<div class="cart-data shadow bg-white rounded" id="{{product.id}}">
+				<div class="item">
+					<h2>{{product.item.name}}</h2>
+				</div>
+				<div class="product-data">
+					<p>Product: {{product.item.name}}</p>
+					<p id="price">Price: ${{product.item.price}}</p>
+					<div class="product-quantity">
+						<div class="quantity">
+							<p>Quantity: {{product.quantity}}</p>
+						</div>
+						<div class="change-quantity">
+							<form method="POST">
+								<a href="#"  data-orderItemId="{{product.id}}" class = "quantity-increase"><div >
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16"><path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/></svg>
+								</div>
+								</a>
+
+								<a href="#" data-orderItemId="{{product.id}}" class = "quantity-decrease"><div ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg></div></a>
+							</form>
+							
+						</div>
+					</div>
+					
+				</div>
+				<div class="cost">
+					<p id="total">Total: ${{product.get_total_price}}</p>
+				</div>
 			</div>
-			<div class="product-data">
-				<p>Product: {{product.item.name}}</p>
-				<p>Price: ${{product.item.price}}</p>
-				<p>Quantity: {{product.quantity}}</p>
-			</div>
-			<div class="cost">
-				<p>Total: ${{product.get_total_price}}</p>
-			</div>
-		</div>
-			
+		{% endif %}
 	{% endfor %}
+
+	<script type="text/javascript">
+
+
+		
+
+		$('.quantity-increase').click(function(){
+		    var orderItemId;
+		    orderItemId = $(this).attr("data-orderItemId"); //data-orderItemId is attributte set in <a>
+ 			var ProducData = $(this)[0].parentElement.parentElement.parentElement.parentElement
+		    //console.log(ProducData)
+
+		    var quantity = ProducData.querySelector('.product-quantity .quantity').innerHTML
+		    var q
+		    q = quantity.replace("<p>Quantity:", "").replace("</p>", "") // QUANTITY GOT CORRECTLYa - AS STRING
+		    console.log(q)
+
+		    $.ajax({
+		        type: "POST",
+		        url: "increase/",
+		        data:{
+		            orderItem_id:orderItemId,
+		            csrfmiddlewaretoken: '{{ csrf_token }}',
+		            'operation':'increase'
+		        },
+		        success: function(data) {
+		        		var item = document.getElementById(orderItemId) 
+		        		var quantity = item.querySelector('.product-data .product-quantity .quantity')
+		        		$(quantity).html("Quantity: " + data.count)
+		        		
+		        		var quantity = item.querySelector('.product-data .product-quantity .quantity').innerHTML.replace("Quantity: ", '')
+		        		var price = item.querySelector('.product-data #price').innerHTML.replace("Price: $", '')
+			        	var TotalPrice = (price*quantity).toFixed(2);
+		        		var TotalPriceField = item.querySelector(".cost p")
+		        		
+		        
+		        		TotalPriceField.innerHTML = "Total: ${}".replace("{}", TotalPrice) //aaa ---> price * quantity
+		        		
+		        		
+		            },
+		    })
+		})
+
+		$('.quantity-decrease').click(function(){
+		    var orderItemId;
+		    orderItemId = $(this).attr("data-orderItemId"); //data-orderItemId is attributte set in <a>
+ 			var ProducData = $(this)[0].parentElement.parentElement.parentElement.parentElement
+		    //console.log(ProducData)
+		    var Obj = ProducData.parentElement
+		    var quantity = ProducData.querySelector('.product-quantity .quantity').innerHTML
+		    
+		    q = quantity.replace("<p>Quantity:", "").replace("</p>", "") // QUANTITY GOT CORRECTLYa - AS STRING
+			console.log(q)
+		    
+		    if(q == "Quantity: 1"){
+		    	Obj.classList.add('hidden')
+		    }
+
+		    $.ajax({
+		        type: "POST",
+		        url: "decrease/",
+		        data:{
+		            orderItem_id:orderItemId,
+		            csrfmiddlewaretoken: '{{ csrf_token }}',
+		            'operation':'decrease'
+		        },
+		        success: function(data) {
+		        		var item = document.getElementById(orderItemId) 
+		        		var quantity = item.querySelector('.product-data .product-quantity .quantity')
+		        		$(quantity).html("Quantity: " + data.count)
+		        		
+		        		var quantity = item.querySelector('.product-data .product-quantity .quantity').innerHTML.replace("Quantity: ", '')
+		        		var price = item.querySelector('.product-data #price').innerHTML.replace("Price: $", '')
+			        	var TotalPrice = (price*quantity).toFixed(2);
+		        		var TotalPriceField = item.querySelector(".cost p")
+		        		
+		        
+		        		TotalPriceField.innerHTML = "Total: ${}".replace("{}", TotalPrice) //aaa ---> price * quantity
+		        		
+		        		
+		            },
+		    })
+		})
+
+
+
+
+
+	</script>
 
 	<h1>TOTAL: ${{total_price}}</h1>
 {% endblock content %}

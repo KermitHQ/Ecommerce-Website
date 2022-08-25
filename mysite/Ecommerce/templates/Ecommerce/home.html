@@ -175,7 +175,7 @@
 						</div>
 						<div>
 							
-							<button type="button" class="btn btn-outline-dark addbutton" data-catid="{{product.id}}">Add To Cart</button>
+							<button type="button" class="btn btn-outline-dark addbutton" data-productid="{{product.id}}">Add To Cart</button>
 							{% if user.is_superuser %}
 								<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
 							{% endif %}
@@ -201,19 +201,16 @@
 		}
 
 		$('.addbutton').click(function(){
-			var catid;
-			catid = $(this).attr("data-catid");
+			var productid;
+			productid = $(this).attr("data-productid");
 			$.ajax(
 			{
 				type:"GET",
 				url: "addproduct",
 				data:{
-					product_id:catid
+					product_id:productid
 				},
-				success: function(data){
-					$('#like'+catid).remove();
-					$('#message').text(data);
-				}
+				
 			})
 		})
 	</script>

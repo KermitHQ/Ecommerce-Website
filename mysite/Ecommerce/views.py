@@ -3,6 +3,8 @@ from .models import Product, Category, Order, OrderItem
 from django.views.generic.list import ListView
 from .forms import ProductForm, CategoryForm
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+
 
 @login_required
 def CartView(request):
@@ -39,7 +41,6 @@ def AvailableItemsList(request, category=None):
 		object_list = object_list.filter(price__lte=max_price)
 
 	if sorted is not None:
-		print(sorted)
 		if sorted == 'reverse':
 			object_list = object_list.order_by('-price')
 		elif sorted == 'normal':
@@ -121,3 +122,30 @@ def AddProduct(request):
 	else:
 		return HttpResponse("Request method is not a GET")
 
+@login_required
+def increaseQuantity(request):
+	print("bbb")
+	orderItemId = request.POST.get('orderItem_id')
+	if request.method == 'POST':
+		if request.POST.get("operation") == "increase":
+			orderitem = OrderItem.objects.get(id=orderItemId)
+			orderitem.quantity += 1
+			orderitem.save()
+			return JsonResponse({'count':orderitem.quantity})
+	return JsonResponse({'error':'error'})
+
+@login_required
+def decreaseQuantity(request):
+	print("aaa")
+	if request.method == 'POST':
+		if request.POST.get("operation") == "decrease":
+			orderitem = OrderItem.objects.get(id=request.POST.get('orderItem_id', None))
+			orderitem.quantity -= 1
+			if orderitem.quantity <= 0:
+				orderitem.delete()
+			else:
+				orderitem.save()
+			return JsonResponse({'count':orderitem.quantity})
+	return JsonResponse({'error':'error'})
+
+	
