@@ -1,4 +1,4 @@
-from .views import ( ProductCreationView, ProductDeleteView, CategoryCreationView,AvailableItemsList, CartView, AddProduct, increaseQuantity, decreaseQuantity
+from .views import ( ProductCreationView, ProductDeleteView, CategoryCreationView,AvailableItemsList, CartView, AddProduct, increaseQuantity, decreaseQuantity,deleteOrderItem
 	)
 
 
@@ -17,5 +17,6 @@ urlpatterns = [
     path('addproduct/', AddProduct, name='add-product'),
     path('cart/increase/', increaseQuantity, name='increase'),
     path('cart/decrease/', decreaseQuantity, name='decrease'),
+    path('cart/delete-orderitem/<int:orderitem_id>/', deleteOrderItem, name='delete-orderitem'),
    
 ]

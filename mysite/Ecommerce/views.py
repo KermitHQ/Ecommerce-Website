@@ -84,6 +84,15 @@ def ProductDeleteView(request, product_id):
 	return redirect('home')
 
 @login_required
+def deleteOrderItem(request, orderitem_id):
+	Orderitem = OrderItem.objects.get(id=orderitem_id)
+	if request.user == Orderitem .order.user:
+		Orderitem.delete()
+	else:
+		print("You are not allowed here")
+	return redirect('cart')
+
+@login_required
 def CategoryCreationView(request):
 	context = {}
 	form = CategoryForm()

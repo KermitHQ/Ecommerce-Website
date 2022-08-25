@@ -21,7 +21,10 @@
 		}
 
 		.cost {
-			padding-top: 20px;
+			display: flex;
+			flex-direction: row;
+			width: 100%;
+			justify-content: space-between;
 
 		}
 		.product-data p{
@@ -48,6 +51,11 @@
 
 		.hidden{
 			display: none;
+		}
+
+		.footer-item {
+			padding-left: 0px;
+			padding-right: 20px;
 		}
 	</style>
 
@@ -97,7 +105,17 @@
 					
 				</div>
 				<div class="cost">
-					<p id="total">Total: ${{product.get_total_price}}</p>
+					<div class="footer-item">
+						<p id="total">Total: ${{product.get_total_price}}</p>
+					</div>
+					<div>
+						
+					</div>
+					<div class="footer-item">
+						<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
+					</div>
+					
+					
 				</div>
 			</div>
 		{% endif %}
@@ -105,7 +123,12 @@
 
 	<script type="text/javascript">
 
-
+		function Delete(orderitem_id){
+			if(confirm('Are you sure?')){
+				var url = "{% url 'delete-orderitem' orderitem_id=0 %}".replace('0', orderitem_id)
+				document.location.href= url
+			}
+		}
 		
 
 		$('.quantity-increase').click(function(){
