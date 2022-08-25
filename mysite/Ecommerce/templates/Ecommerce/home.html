@@ -174,8 +174,12 @@
 							<p></p>
 						</div>
 						<div>
+							{% if user.is_authenticated %}
+								<button type="button" class="btn btn-outline-dark addbutton" data-productid="{{product.id}}">Add To Cart</button>
+							{% else %}
+								<button onclick="goToLoginPage()" type="button" class="btn btn-outline-dark addbutton" >Add To Cart</button>
+							{% endif %}
 							
-							<button type="button" class="btn btn-outline-dark addbutton" data-productid="{{product.id}}">Add To Cart</button>
 							{% if user.is_superuser %}
 								<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
 							{% endif %}
@@ -193,6 +197,11 @@
 	{% endfor %}
 
 	<script type="text/javascript">
+		function goToLoginPage() {
+			var url = "{% url 'login' %}"
+			document.location.href= url
+		}
+
 		function Delete(product_id){
 			if(confirm('Are you sure?')){
 				var url = "{% url 'delete-product' product_id=0 %}".replace('0', product_id)
