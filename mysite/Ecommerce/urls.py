@@ -1,5 +1,6 @@
-from .views import ( ProductCreationView, ProductDeleteView, CategoryCreationView,AvailableItemsList, AddToCartView, CartView
+from .views import ( ProductCreationView, ProductDeleteView, CategoryCreationView,AvailableItemsList, CartView, AddProduct,
 	)
+
 
 from django.urls import path
 
@@ -13,5 +14,6 @@ urlpatterns = [
     path('create_product/', ProductCreationView, name="create-product"),
     path('create_category/', CategoryCreationView, name="create-category"),
     path('product/<int:product_id>/delete/', ProductDeleteView, name="delete-product"),
-    path('add/<int:product_id>/', AddToCartView, name="add-to-cart"),
+    path('addproduct/', AddProduct, name='add-product'),
+   
 ]

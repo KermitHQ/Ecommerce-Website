@@ -95,23 +95,29 @@ def CategoryCreationView(request):
 
 	return render(request, "Ecommerce/create_category.html", context)
 
+
+
 @login_required
-def AddToCartView(request, product_id):
-	#order = Order.objects.get_or_create(user=request.user)
-	try:
-		order = Order.objects.get(user=request.user, is_active=True)
-	except Order.DoesNotExist:
-		order = Order.objects.create(user=request.user, is_active=True)
-		order.save()
-	item = Product.objects.get(id=product_id)
-	print()
-	try:
-		print(order)
-		print(item)
-		print("sadasd")
-		orderItem = OrderItem.objects.get(order=order, item=item)
-		orderItem.quantity += 1
-		orderItem.save()
-	except OrderItem.DoesNotExist:
-		orderItem = OrderItem.objects.create(order=order, item=item, quantity=1)
-	return redirect('home')
+def AddProduct(request):
+	if request.method == 'GET':
+		product_id = request.GET['product_id']
+		product = Product.objects.get(id=product_id)
+
+		try:
+			order = Order.objects.get(user=request.user, is_active=True)
+		except Order.DoesNotExist:
+			order = Order.objects.create(user=request.user, is_active=True)
+			order.save()
+
+		try:
+			orderitem = OrderItem.objects.get(order=order, item=product)
+			print('item found')
+			orderitem.quantity += 1
+			orderitem.save()
+		except OrderItem.DoesNotExist:
+			orderitem = OrderItem(order=order, item=product, quantity=1)
+			orderitem.save()
+		return redirect('cart')
+	else:
+		return HttpResponse("Request method is not a GET")
+

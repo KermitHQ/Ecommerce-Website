@@ -175,7 +175,7 @@
 						</div>
 						<div>
 							
-							<button onclick="AddToCart({{product.id}})" type="button" class="btn btn-outline-dark">Add To Cart</button>
+							<button type="button" class="btn btn-outline-dark addbutton" data-catid="{{product.id}}">Add To Cart</button>
 							{% if user.is_superuser %}
 								<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
 							{% endif %}
@@ -191,6 +191,7 @@
 	</div>
 		
 	{% endfor %}
+
 	<script type="text/javascript">
 		function Delete(product_id){
 			if(confirm('Are you sure?')){
@@ -198,6 +199,23 @@
 				document.location.href= url
 			}
 		}
+
+		$('.addbutton').click(function(){
+			var catid;
+			catid = $(this).attr("data-catid");
+			$.ajax(
+			{
+				type:"GET",
+				url: "addproduct",
+				data:{
+					product_id:catid
+				},
+				success: function(data){
+					$('#like'+catid).remove();
+					$('#message').text(data);
+				}
+			})
+		})
 	</script>
 	
 {% endblock content %}
@@ -228,10 +246,7 @@
 			document.location.href= newUrl
 		}
 		
-		function AddToCart(product_id){
-			var newUrl = "{% url 'add-to-cart' product_id=0 %}".replace('0', product_id)
-			document.location.href= newUrl
-		}
+		
 	</script>
 {% endblock sidebar %}
 
