@@ -11,6 +11,8 @@ class Order(models.Model):
 	def __str__(self):
 		return (" {} active {}" if self.is_active else "{} not active {}").format(self.user.username, self.id)
 
+	
+
 
 
 class Category(models.Model):

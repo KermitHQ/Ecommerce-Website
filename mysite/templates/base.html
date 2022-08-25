@@ -21,9 +21,12 @@
 			<div class="col" align="center">
 				<a href="#">About</a>
 			</div>
-			<div class="col" align="center">
-				<a href="{% url 'cart' %}">Cart</a>
-			</div>
+			{% if user.is_authenticated %}
+				<div class="col" align="center">
+					<a href="{% url 'cart' %}">Cart</a>
+					
+				</div>
+			{% endif %}
 			<div class="col" align="center">
 				{% if not user.is_authenticated %}
 					<a href="{% url 'login' %}">Login</a>

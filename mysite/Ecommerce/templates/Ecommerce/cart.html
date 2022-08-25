@@ -42,11 +42,18 @@
 		.product-quantity{
 			display: flex;
 			flex-direction: row;
+			vertical-align: middle;
 		}	
 
 		.quantity p{
 			margin-top: 12px;
 			padding-right: 5px;
+
+		}
+
+
+		.quantity{
+			vertical-align: middle;
 		}
 
 		.hidden{
@@ -57,6 +64,8 @@
 			padding-left: 0px;
 			padding-right: 20px;
 		}
+
+
 	</style>
 
 	
@@ -87,7 +96,7 @@
 					<p>Product: {{product.item.name}}</p>
 					<p id="price">Price: ${{product.item.price}}</p>
 					<div class="product-quantity">
-						<div class="quantity">
+						<div class="quantity" id="testing">
 							<p>Quantity: {{product.quantity}}</p>
 						</div>
 						<div class="change-quantity">
@@ -140,7 +149,8 @@
 		    var quantity = ProducData.querySelector('.product-quantity .quantity').innerHTML
 		    var q
 		    q = quantity.replace("<p>Quantity:", "").replace("</p>", "") // QUANTITY GOT CORRECTLYa - AS STRING
-		    console.log(q)
+		    
+
 
 		    $.ajax({
 		        type: "POST",
@@ -153,17 +163,32 @@
 		        success: function(data) {
 		        		var item = document.getElementById(orderItemId) 
 		        		var quantity = item.querySelector('.product-data .product-quantity .quantity')
-		        		$(quantity).html("Quantity: " + data.count)
+		        		$(quantity).html("<p>Quantity: " + data.count + "</p>")
 		        		
-		        		var quantity = item.querySelector('.product-data .product-quantity .quantity').innerHTML.replace("Quantity: ", '')
+		        		var quantity = item.querySelector('.product-data .product-quantity .quantity p').innerHTML.replace("Quantity: ", '')
 		        		var price = item.querySelector('.product-data #price').innerHTML.replace("Price: $", '')
 			        	var TotalPrice = (price*quantity).toFixed(2);
+			        	//console.log(quantity)
 		        		var TotalPriceField = item.querySelector(".cost p")
 		        		
 		        
 		        		TotalPriceField.innerHTML = "Total: ${}".replace("{}", TotalPrice) //aaa ---> price * quantity
-		        		
-		        		
+
+
+		        		/// GETTING TOTAL PRICE
+		        		var TOTALField = document.getElementById('TOTAL')
+
+					    let TOTAL = 0;
+					    var items = document.getElementsByClassName('cart-data')
+					    for(var i = 0; i<items.length; i++){
+					    	
+					    	item_price = Number(items[i].querySelector('.cost #total').innerHTML.replace("Total: $", ''))
+					    	console.log((item_price).toFixed(2))
+					    	console.log("a")
+					    	TOTAL += item_price
+					    }
+
+					    TOTALField.innerHTML = "TOTAL: ${}".replace("{}", (TOTAL).toFixed(2))	
 		            },
 		    })
 		})
@@ -177,9 +202,8 @@
 		    var quantity = ProducData.querySelector('.product-quantity .quantity').innerHTML
 		    
 		    q = quantity.replace("<p>Quantity:", "").replace("</p>", "") // QUANTITY GOT CORRECTLYa - AS STRING
-			console.log(q)
-		    
-		    if(q == "Quantity: 1"){
+
+		    if(q == 1){
 		    	Obj.classList.add('hidden')
 		    }
 
@@ -194,17 +218,31 @@
 		        success: function(data) {
 		        		var item = document.getElementById(orderItemId) 
 		        		var quantity = item.querySelector('.product-data .product-quantity .quantity')
-		        		$(quantity).html("Quantity: " + data.count)
+		        		$(quantity).html("<p>Quantity: " + data.count + "</p>")
 		        		
-		        		var quantity = item.querySelector('.product-data .product-quantity .quantity').innerHTML.replace("Quantity: ", '')
+		        		var quantity = item.querySelector('.product-data .product-quantity .quantity p').innerHTML.replace("Quantity: ", '')
 		        		var price = item.querySelector('.product-data #price').innerHTML.replace("Price: $", '')
 			        	var TotalPrice = (price*quantity).toFixed(2);
+			        	console.log(quantity)
 		        		var TotalPriceField = item.querySelector(".cost p")
 		        		
 		        
 		        		TotalPriceField.innerHTML = "Total: ${}".replace("{}", TotalPrice) //aaa ---> price * quantity
-		        		
-		        		
+
+		        		/// GETTING TOTAL PRICE
+		        		var TOTALField = document.getElementById('TOTAL')
+
+					    let TOTAL = 0;
+					    var items = document.getElementsByClassName('cart-data')
+					    for(var i = 0; i<items.length; i++){
+					    	
+					    	item_price = Number(items[i].querySelector('.cost #total').innerHTML.replace("Total: $", ''))
+					    	console.log((item_price).toFixed(2))
+					    	console.log("a")
+					    	TOTAL += item_price
+					    }
+
+					    TOTALField.innerHTML = "TOTAL: ${}".replace("{}", (TOTAL).toFixed(2))	
 		            },
 		    })
 		})
@@ -215,5 +253,5 @@
 
 	</script>
 
-	<h1>TOTAL: ${{total_price}}</h1>
+	<h1 id="TOTAL">TOTAL: ${{TOTAL}}</h1>
 {% endblock content %}

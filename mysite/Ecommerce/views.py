@@ -16,6 +16,13 @@ def CartView(request):
 	for product in ordered_products:
 		total_price += product.get_total_price()
 
+	TOTAL_price = 0
+	for item in order.orderitem_set.all():
+		TOTAL_price += item.get_total_price()
+
+	
+	print(type(TOTAL_price))
+	context['TOTAL'] = TOTAL_price
 	context['total_price'] = total_price
 	context['order'] = order
 	context['ordered_products'] = ordered_products
