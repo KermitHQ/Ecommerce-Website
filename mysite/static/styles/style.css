@@ -2,3 +2,7 @@
 	text-decoration: none;
 	color: inherit;
 }
+
+.not-visible{
+	display: none;
+}

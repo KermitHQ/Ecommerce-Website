@@ -200,8 +200,12 @@ def ImagesView(request):
 	return render(request, 'Ecommerce/images.html', context)
 
 def ImageCropView(request):
-	obj = Photo.objects.get(pk=1)
-	context = {'obj':obj}
+	#obj = Photo.objects.get(pk=1)
+	form = PhotoForm(request.POST or None, request.FILES or None)
+	if form.is_valid():
+		form.save()
+		return JsonResponse({'message': 'works'})
+	context = {'form':form}
 	return render(request, 'Ecommerce/create_product_new.html', context)
 
 
