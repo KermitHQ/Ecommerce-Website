@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Category, Order, OrderItem, Image
+from .models import Product, Category, Order, OrderItem, Photo
 from django.views.generic.list import ListView
-from .forms import ProductForm, CategoryForm, ImageForm
+from .forms import ProductForm, CategoryForm, PhotoForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.forms import  inlineformset_factory
@@ -171,7 +171,7 @@ def CreateNewProductView(request):
 		else:
 			print("form is not valid")
 		
-	ImageFormset = inlineformset_factory(Product, Image, fields=('file',), extra=1, can_delete=False)
+	ImageFormset = inlineformset_factory(Product, Photo, fields=('file',), extra=1, can_delete=False)
 
 
 	if request.method=='POST':
@@ -194,7 +194,15 @@ def CreateNewProductView(request):
 
 def ImagesView(request):
 	context = {}
-	images = Image.objects.all()
+	images = Photo.objects.all()
 	context['images'] = images
 
 	return render(request, 'Ecommerce/images.html', context)
+
+def ImageCropView(request):
+	obj = Photo.objects.get(pk=1)
+	context = {'obj':obj}
+	return render(request, 'Ecommerce/create_product_new.html', context)
+
+
+

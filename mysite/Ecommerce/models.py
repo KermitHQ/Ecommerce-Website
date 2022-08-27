@@ -50,7 +50,7 @@ class Product(models.Model):
 	def get_image_url(self):
 		return Image.objects.get(product=self).file.url
 
-class Image(models.Model):
+class Photo(models.Model):
 	file = models.ImageField(upload_to=getImageURL, default="static/default.png")
 	uploaded = models.DateTimeField(auto_now_add=True)
 	product = models.ForeignKey(Product, on_delete=models.CASCADE)
