@@ -11,16 +11,11 @@ class Order(models.Model):
 	def __str__(self):
 		return (" {} active {}" if self.is_active else "{} not active {}").format(self.user.username, self.id)
 
-	
-
-
-
 class Category(models.Model):
 	name = models.CharField(max_length=200)
 
 	def __str__(self):
 		return self.name
-
 
 def getFileNumber():
 	queryset = Product.objects.all().order_by('pk')
@@ -42,6 +37,7 @@ def getImageURL(instance, filename):
 	else:
 		return path
 
+
 class Product(models.Model):
 	name = models.CharField(max_length=200)
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -51,15 +47,16 @@ class Product(models.Model):
 	def __str__(self):
 		return self.name
 
-	#def get_product_image_filename(self):
-	#	return str(self.image)[str(self.image).index(f'product_images/{self.pk}'):]
+	def get_image_url(self):
+		return Image.objects.get(product=self).file.url
 
-	#def get_url(self):
-	#	return getProductImageURL(self.pk)
+class Image(models.Model):
+	file = models.ImageField(upload_to=getImageURL, default="static/default.png")
+	uploaded = models.DateTimeField(auto_now_add=True)
+	product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
-	image = models.ImageField(upload_to=getImageURL, default="static/default.png" )
-
-	
+	def __str__(self):
+		return str(self.pk)	
 
 class OrderItem(models.Model):
 	order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -77,5 +74,4 @@ class OrderItem(models.Model):
 
 	def __str__(self):
 		return ("{}'s' order id: {} - {} - {}x".format(self.order.user.username, self.order.id, self.item, self.quantity))
-
 

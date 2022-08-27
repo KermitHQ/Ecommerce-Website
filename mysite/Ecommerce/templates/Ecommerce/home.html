@@ -150,12 +150,14 @@
 	{% for product in object_list %}
 	<div class="product-list-item shadow bg-white rounded">
 		<div class="product-image">
-			<img style=" height: 180px; width: auto;" src="{{product.image.url}}">
+			<img style=" height: 180px; width: auto;" src="{{product.get_image_url}}">
+
 		</div>
 		<div class="kurwa">
 			<div class="product-data">
 				<div class="product-data-item">
 					<h2>{{product.name|title}}</h2>
+					
 				</div>
 				<div class="product-data-item">
 					<p><a href="{% url 'home' category=product.category %}">{{product.category}}</a></p>
@@ -243,7 +245,7 @@
 	
 	<script type="text/javascript">
 		function CreateProduct(){ //create-product
-			var newUrl = "{% url 'create-product' %}"
+			var newUrl = "{% url 'create-new-product' %}"
 			document.location.href= newUrl
 		}
 
@@ -328,7 +330,7 @@
 			let max_price = params.get('price_to')
 
 			if(max_price == null){
-				max_price = 500;
+				max_price = 1000;
 			}
 			if(min_price == null){
 				min_price = 0;
@@ -339,7 +341,7 @@
 				range: true,
 				min:0,
 				
-				max: 500,
+				max: 1000,
 				values: [ min_price, max_price ],
 				slide: function( event, ui ){
 					$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );

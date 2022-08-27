@@ -168,23 +168,16 @@
 		        		var quantity = item.querySelector('.product-data .product-quantity .quantity p').innerHTML.replace("Quantity: ", '')
 		        		var price = item.querySelector('.product-data #price').innerHTML.replace("Price: $", '')
 			        	var TotalPrice = (price*quantity).toFixed(2);
-			        	//console.log(quantity)
 		        		var TotalPriceField = item.querySelector(".cost p")
 		        		
-		        
 		        		TotalPriceField.innerHTML = "Total: ${}".replace("{}", TotalPrice) //aaa ---> price * quantity
-
 
 		        		/// GETTING TOTAL PRICE
 		        		var TOTALField = document.getElementById('TOTAL')
-
 					    let TOTAL = 0;
 					    var items = document.getElementsByClassName('cart-data')
 					    for(var i = 0; i<items.length; i++){
-					    	
 					    	item_price = Number(items[i].querySelector('.cost #total').innerHTML.replace("Total: $", ''))
-					    	console.log((item_price).toFixed(2))
-					    	console.log("a")
 					    	TOTAL += item_price
 					    }
 

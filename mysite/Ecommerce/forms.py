@@ -1,6 +1,8 @@
 from django.forms import ModelForm
-from .models import Product, Category
+from .models import Product, Category, Image
 from django import forms
+
+from django.core.files import File
 
 
 class ProductForm(forms.ModelForm):
@@ -27,3 +29,9 @@ class CategoryForm(forms.ModelForm):
 		super(CategoryForm, self).__init__(*args, **kwargs)
 		self.fields['name'].widget.attrs['placeholder']="Enter category's name"
 		self.fields['name'].label=""
+
+class ImageForm(forms.ModelForm):
+	class Meta:
+		model = Image
+		fields = ('file',)
+

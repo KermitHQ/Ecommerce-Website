@@ -1,0 +1,40 @@
+{% extends 'base2.html' %}
+ 
+{% block content %}
+<div class="container py-5">
+    <header class="text-white text-center">
+        <h1 class="display-4">Upload An Image</h1>
+    </header>
+ 
+    <div class="row py-4">
+        <div class="col-lg-6 mx-auto">
+            <div class="input-group mb-3 px-4 py-2 rounded-pill bg-white shadow-sm">
+                <form method="POST" action="" id="image-form" style="padding-top:10px;">
+                    {{formset.management_form}}
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    {{formset}}
+                </form>
+               
+            </div>
+            <div id="alert-box"></div>
+            <div class="image-area mb-3"><div id="image-box"></div></div>
+            <button type="submit">submit</button>
+        </div>
+    </div>
+</div>
+<style>
+#upload {
+    opacity: 0;
+}
+.image-area {
+    border: 2px dashed rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+}
+body {
+    min-height: 100vh;
+    background-color: white;
+    
+}
+</style>    
+{% endblock content %}

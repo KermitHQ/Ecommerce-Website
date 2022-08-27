@@ -1,57 +1,67 @@
+
+
+
+
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-	<style type="text/css">
-		.form-container {
-			padding-top: 100px;
-		}
+    <style type="text/css">
+        .form-container {
+            padding-top: 100px;
+        }
 
-		.form-element{
-			padding-top: 15px;
-		}
+        .form-element{
+            padding-top: 15px;
+        }
 
-		.form-title{
-			text-align: center;
-			vertical-align: middle;
-		}
+        .form-title{
+            text-align: center;
+            vertical-align: middle;
+        }
 
-		.button-container{
-		display: flex;
-		justify-content: center;
-		}
+        .button-container{
+        display: flex;
+        justify-content: center;
+        }
 
-	</style>
+    </style>
 
-	<div class="form-container">
-		<form method="POST" enctype="multipart/form-data">
-			{% csrf_token %}
-			<div class="form-title">
-				<h1>Create New Product</h1>
-			</div>
-			<div class="form-element">
-				{{form.name|as_crispy_field}}
-			</div class="form-element">
-			<div class="category-choice form-element">
-				{{form.category|as_crispy_field}}
-			</div>
-			<div class="form-element">
-				{{form.availability|as_crispy_field}}
-			</div>
-			<div class="form-element">
-				{{form.price|as_crispy_field}}
-			</div>
-			<div class="form-element">
-				{{form.image}}
-			</div>
-			<br>
-			<div class="button-container">
-				<button type="submit" class="btn btn-outline-success">Create product</button>
-			</div>
-			
-		</form>
-	</div>
-	
-	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.js">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js">
+
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-title">
+                <h1>Create New Product</h1>
+            </div>
+            <div class="form-element">
+                {{form.name|as_crispy_field}}
+            </div class="form-element">
+            <div class="category-choice form-element">
+                {{form.category|as_crispy_field}}
+            </div>
+            <div class="form-element">
+                {{form.availability|as_crispy_field}}
+            </div>
+            <div class="form-element">
+                {{form.price|as_crispy_field}}
+            </div>
+            <div class="form-element">
+                {{formset}}
+                {{formset.management_form}}
+            </div>
+            <br>
+            <div class="button-container">
+                <button type="submit" class="btn btn-outline-success">Create product</button>
+            </div>
+            
+        </form>
+    </div>
+    
+    
 {% endblock content %}
 
 

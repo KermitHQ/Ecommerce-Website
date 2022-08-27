@@ -19,7 +19,7 @@
 				<a href="/admin/">Admin</a>
 			</div>
 			<div class="col" align="center">
-				<a href="#">About</a>
+				<a href="{% url 'create-new-product' %}">create-new-product</a>
 			</div>
 			{% if user.is_authenticated %}
 				<div class="col" align="center">

@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Category, Order, OrderItem
+from .models import Product, Category, Order, OrderItem, Image
 from django.views.generic.list import ListView
-from .forms import ProductForm, CategoryForm
+from .forms import ProductForm, CategoryForm, ImageForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-
+from django.forms import  inlineformset_factory
 
 @login_required
 def CartView(request):
@@ -19,7 +19,6 @@ def CartView(request):
 	TOTAL_price = 0
 	for item in order.orderitem_set.all():
 		TOTAL_price += item.get_total_price()
-
 	
 	print(type(TOTAL_price))
 	context['TOTAL'] = TOTAL_price
@@ -53,15 +52,13 @@ def AvailableItemsList(request, category=None):
 		elif sorted == 'normal':
 			object_list = object_list.order_by('price')
 
-	
-
 	context['object_list'] = object_list 
 
 	return render(request,"Ecommerce/home.html", context)
 
 
 @login_required
-def ProductCreationView(request):
+def ProductCreationView(request): #OLD
 	context = {}
 	form = ProductForm()
 	if request.user.is_superuser:
@@ -79,7 +76,7 @@ def ProductCreationView(request):
 		return redirect('home')
 	context['form'] = form
 
-	return render(request, "Ecommerce/create_product.html", context)
+	return render(request, "Ecommerce/create_product_old.html", context)
 
 @login_required
 def ProductDeleteView(request, product_id):
@@ -112,8 +109,6 @@ def CategoryCreationView(request):
 
 	return render(request, "Ecommerce/create_category.html", context)
 
-
-
 @login_required
 def AddProduct(request):
 	if request.method == 'GET':
@@ -140,7 +135,6 @@ def AddProduct(request):
 
 @login_required
 def increaseQuantity(request):
-	print("bbb")
 	orderItemId = request.POST.get('orderItem_id')
 	if request.method == 'POST':
 		if request.POST.get("operation") == "increase":
@@ -152,7 +146,6 @@ def increaseQuantity(request):
 
 @login_required
 def decreaseQuantity(request):
-	print("aaa")
 	if request.method == 'POST':
 		if request.POST.get("operation") == "decrease":
 			orderitem = OrderItem.objects.get(id=request.POST.get('orderItem_id', None))
@@ -164,4 +157,44 @@ def decreaseQuantity(request):
 			return JsonResponse({'count':orderitem.quantity})
 	return JsonResponse({'error':'error'})
 
-	
+@login_required
+def CreateNewProductView(request):
+	context = {}
+	ProductObj = None
+	form=ProductForm()
+	print("FILES: {}".format(request.FILES))
+	if request.method=='POST':
+		form = ProductForm(request.POST)
+		if form.is_valid():
+			ProductObj = form.save()
+			print('form is valid, product has been created')
+		else:
+			print("form is not valid")
+		
+	ImageFormset = inlineformset_factory(Product, Image, fields=('file',), extra=1, can_delete=False)
+
+
+	if request.method=='POST':
+		formset = ImageFormset(request.POST, request.FILES, instance=ProductObj)
+		if formset.is_valid():
+			formset.save()
+			print('formset is valid, product has been created')
+		else:
+			print("formset is not valid")
+	else:
+		formset = ImageFormset(instance=ProductObj)
+
+		
+	if form.is_valid() and formset.is_valid():
+		return redirect('home')
+
+	context = {'form': form, 'formset':formset}
+	return render(request, 'Ecommerce/create_product.html', context)
+
+
+def ImagesView(request):
+	context = {}
+	images = Image.objects.all()
+	context['images'] = images
+
+	return render(request, 'Ecommerce/images.html', context)
