@@ -145,15 +145,19 @@
 			padding: 5px;
 		}
 
+		.page-navigation{
+			margin-top: 10px;
+		}
+
 	</style>
 	
-	{% for product in object_list %}
+	{% for product in page_obj %}
 	<div class="product-list-item shadow bg-white rounded">
 		<div class="product-image">
-			<img style=" height: 180px; width: auto;" src="">
-
+			<img style=" height: 180px; width: auto;" src="{{product.get_image_url}}">
+			
 		</div>
-		<div class="kurwa">
+		<div class="container">
 			<div class="product-data">
 				<div class="product-data-item">
 					<h2>{{product.name|title}}</h2>
@@ -225,6 +229,48 @@
 			})
 		})
 	</script>
+
+	
+
+	<div class="page-navigation">
+		<nav aria-label="...">
+		  <ul class="pagination">
+		  	{% if page_obj.has_previous %}
+		    <li class="page-item ">
+		      <a class="page-link" href="{% url 'home-paginated' page_obj.previous_page_number %}?{{request.GET.urlencode}}" tabindex="-1">Previous</a>
+		    </li>
+		    {% else %}
+		    <li class="page-item disabled">
+		      <a class="page-link" href="#" tabindex="-1">Previous</a>
+		    </li>
+		    {% endif %}
+
+		    {% if page_obj.has_previous %}
+		    	<li class="page-item"><a class="page-link" href="{% url 'home-paginated' page_obj.previous_page_number %}?{{request.GET.urlencode}}">{{page_obj.previous_page_number}}</a>
+		    	</li>
+		    {% endif %}
+
+		    <li class="page-item active">
+		      <a class="page-link" href="#">{{page_obj.number}} <span class="sr-only">(current)</span></a>
+		    </li>
+
+		    {% if page_obj.has_next %}
+		    <li class="page-item"><a class="page-link" href="{% url 'home-paginated' page_obj.next_page_number %}?{{request.GET.urlencode}}">	{{page_obj.next_page_number}}</a></li>
+		    <li class="page-item">
+		      <a class="page-link" href="{% url 'home-paginated' page_obj.next_page_number %}?{{request.GET.urlencode}}">Nextt</a>
+		    </li>
+		    {% else %}
+		    <li class="page-item disabled">
+		      <a class="page-link" href="#">Next</a>
+		    </li>
+		    {% endif %}
+
+		  </ul>
+		</nav>
+		
+	</div>
+
+	
 	
 {% endblock content %}
 

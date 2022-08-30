@@ -4,7 +4,7 @@ from django.views.generic.list import ListView
 from .forms import ProductForm, CategoryForm, PhotoForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-
+from django.core.paginator import Paginator
 
 
 @login_required
@@ -29,7 +29,7 @@ def CartView(request):
 	return render(request, "Ecommerce/cart.html", context)
 
 
-def AvailableItemsList(request, category=None):
+def AvailableItemsList(request, category=None, page=None):
 	context = {}
 	categories = Category.objects.all()
 	context['categories'] = categories
@@ -53,7 +53,13 @@ def AvailableItemsList(request, category=None):
 		elif sorted == 'normal':
 			object_list = object_list.order_by('price')
 
-	context['object_list'] = object_list 
+	#context['object_list'] = object_list 
+	paginator = Paginator(object_list, 3)
+
+	page_number = page
+	page_obj = paginator.get_page(page_number)
+	context['page_obj'] = page_obj
+
 
 	return render(request,"Ecommerce/home.html", context)
 

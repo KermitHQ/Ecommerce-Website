@@ -12,6 +12,16 @@ const inputPrice = document.getElementById('id_price')
 
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
+function FormIsFilled(){ 
+    if(inputName.value == "" || inputCategory.value =="" || inputAvailability.value =="" || inputPrice.value == ""){
+        console.log("missing data")
+        return false;
+    }
+    else{
+        return true;
+    }
+    
+}
 
 input.addEventListener('change', ()=>{
     alertBox.innerHTML = ""
@@ -38,8 +48,11 @@ input.addEventListener('change', ()=>{
     
     var cropper = $image.data('cropper');
     confirmBtn.addEventListener('click', ()=>{
-        cropper.getCroppedCanvas().toBlob((blob) => {
+        
+        if(FormIsFilled()){
             console.log('confirmed')
+            cropper.getCroppedCanvas().toBlob((blob) => {
+            
             const fd = new FormData();
             fd.append('csrfmiddlewaretoken', csrf[0].value)
             fd.append('file', blob, 'my-image.png');
@@ -72,6 +85,13 @@ input.addEventListener('change', ()=>{
                 contentType: false,
                 processData: false,
             })
-        })
+            })
+        }
+        else{
+            console.log("form is not filled")
+        }
+        
+        
+        
     })
 })

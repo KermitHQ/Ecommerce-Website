@@ -48,7 +48,7 @@ class Product(models.Model):
 		return self.name
 
 	def get_image_url(self):
-		return Image.objects.get(product=self).file.url
+		return Photo.objects.get(product=self).file.url
 
 def getFileNumber2():
 	queryset = Photo.objects.all().order_by('pk')
