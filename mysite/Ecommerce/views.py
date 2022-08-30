@@ -4,7 +4,8 @@ from django.views.generic.list import ListView
 from .forms import ProductForm, CategoryForm, PhotoForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.forms import  inlineformset_factory
+
+
 
 @login_required
 def CartView(request):
@@ -56,27 +57,6 @@ def AvailableItemsList(request, category=None):
 
 	return render(request,"Ecommerce/home.html", context)
 
-
-@login_required
-def ProductCreationView(request): #OLD
-	context = {}
-	form = ProductForm()
-	if request.user.is_superuser:
-		if request.method == 'POST':
-			form = ProductForm(request.POST, request.FILES)
-			if form.is_valid():
-				form.save()
-				return redirect('home')
-			else:
-				print('form is not valid')
-		else:
-			print('request method is not correct')
-	else:
-		print("You are not allowed here")
-		return redirect('home')
-	context['form'] = form
-
-	return render(request, "Ecommerce/create_product_old.html", context)
 
 @login_required
 def ProductDeleteView(request, product_id):
@@ -158,55 +138,34 @@ def decreaseQuantity(request):
 	return JsonResponse({'error':'error'})
 
 @login_required
-def CreateNewProductView(request):
+def ProductCreateView(request):
 	context = {}
-	ProductObj = None
-	form=ProductForm()
-	print("FILES: {}".format(request.FILES))
-	if request.method=='POST':
+	created_product=None
+
+	form = ProductForm()
+	if request.method == 'POST':
 		form = ProductForm(request.POST)
 		if form.is_valid():
-			ProductObj = form.save()
-			print('form is valid, product has been created')
+			created_product = form.save()
+			print("successfully created new product")
 		else:
-			print("form is not valid")
-		
-	ImageFormset = inlineformset_factory(Product, Photo, fields=('file',), extra=1, can_delete=False)
+			print("product form is not valid")
+			print(form.errors)
+	context['form'] = form
 
+	form2 = PhotoForm()
+	if request.method == 'POST':
+		form2 = PhotoForm(request.POST or None, request.FILES or None)
+		if form2.is_valid():
+			obj = form2.save(commit=False)
+			obj.product = created_product
+			obj.save()
+			print("Created new photo with {} product".format(obj.product))
+			#return JsonResponse({'message': 'works'})
+			
+	context['form2'] = form2
 
-	if request.method=='POST':
-		formset = ImageFormset(request.POST, request.FILES, instance=ProductObj)
-		if formset.is_valid():
-			formset.save()
-			print('formset is valid, product has been created')
-		else:
-			print("formset is not valid")
-	else:
-		formset = ImageFormset(instance=ProductObj)
-
-		
-	if form.is_valid() and formset.is_valid():
-		return redirect('home')
-
-	context = {'form': form, 'formset':formset}
-	return render(request, 'Ecommerce/create_product.html', context)
-
-
-def ImagesView(request):
-	context = {}
-	images = Photo.objects.all()
-	context['images'] = images
-
-	return render(request, 'Ecommerce/images.html', context)
-
-def ImageCropView(request):
-	#obj = Photo.objects.get(pk=1)
-	form = PhotoForm(request.POST or None, request.FILES or None)
-	if form.is_valid():
-		form.save()
-		return JsonResponse({'message': 'works'})
-	context = {'form':form}
-	return render(request, 'Ecommerce/create_product_new.html', context)
+	return render(request, "Ecommerce/create_product.html", context)
 
 
 

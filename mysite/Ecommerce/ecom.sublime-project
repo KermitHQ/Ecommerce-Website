@@ -1,0 +1,17 @@
+{
+	/*"folders":
+	[
+		{
+			"path": "."
+		}
+	]*/
+	"folders":
+	[
+		{
+			"path": "E:\\Django projects\\Ecommerce",
+		},
+		{
+			"path": "E:\\Django projects\\ImageCropping\\Cropping"
+		},
+	],
+}

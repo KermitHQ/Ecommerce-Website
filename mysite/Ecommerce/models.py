@@ -50,10 +50,30 @@ class Product(models.Model):
 	def get_image_url(self):
 		return Image.objects.get(product=self).file.url
 
+def getFileNumber2():
+	queryset = Photo.objects.all().order_by('pk')
+	if queryset:
+		last_id = len(queryset)
+		file_number = last_id+1
+		return str(file_number)
+	else:
+		file_number=1
+		return str(file_number)
+	
+def getImageURL2(instance, filename):
+	path = os.path.join("products_images/{}/product_image.png".format(getFileNumber2()))
+	print(path)
+	if os.path.isfile("media/" + path):
+		print("image with this id already exist, ")
+		os.remove("media/" + path)
+		return path
+	else:
+		return path
+
 class Photo(models.Model):
-	file = models.ImageField(upload_to=getImageURL, default="static/default.png")
+	file = models.ImageField(upload_to=getImageURL2, default="static/default.png")
 	uploaded = models.DateTimeField(auto_now_add=True)
-	#product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+	product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
 
 	def __str__(self):
 		return str(self.pk)	

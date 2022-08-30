@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, inlineformset_factory
 from .models import Product, Category, Photo
 from django import forms
 
@@ -6,7 +6,7 @@ from django import forms
 
 from PIL import Image
 from django.core.files import File
-from .models import Photo
+from .models import Photo, Product
 
 class ProductForm(forms.ModelForm):
 	class Meta:
@@ -37,5 +37,7 @@ class PhotoForm(forms.ModelForm):
 	class Meta:
 		model = Photo
 		fields = ('file',)
+
+
 
 
