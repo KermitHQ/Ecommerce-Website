@@ -39,6 +39,18 @@
 			border-top: 1px solid #cccccc;
 		}
 
+		.product-data-not-found{
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			max-height: 180px;
+			padding-left: 10px;
+			padding-top: 30px;
+			padding-bottom: 10px;
+			height: 90px;
+			align-items: center;
+		}
+
 		.button-container {
 			display: flex;
 			align-items: center;
@@ -150,57 +162,64 @@
 		}
 
 	</style>
-	
-	{% for product in page_obj %}
-	<div class="product-list-item shadow bg-white rounded">
-		<div class="product-image">
-			<img style=" height: 180px; width: auto;" src="{{product.get_image_url}}">
-			
-		</div>
-		<div class="container">
-			<div class="product-data">
-				<div class="product-data-item">
-					<h2>{{product.name|title}}</h2>
-					
-				</div>
-				<div class="product-data-item">
-					<p><a href="{% url 'home' category=product.category %}">{{product.category}}</a></p>
-				</div>
-				<div class="product-data-item">
-					<h2>${{product.price}}</h2>
-				</div>
-				
-				<div class="product-data-item">
-					<div class="product-footer " >
-						<div >
-							<br>
-							<p>{{product.availability}} left</p>
-						</div>
-						<div>
-							<p></p>
-						</div>
-						<div>
-							{% if user.is_authenticated %}
-								<button type="button" class="btn btn-outline-dark addbutton" data-productid="{{product.id}}">Add To Cart</button>
-							{% else %}
-								<button onclick="goToLoginPage()" type="button" class="btn btn-outline-dark addbutton" >Add To Cart</button>
-							{% endif %}
-							
-							{% if user.is_superuser %}
-								<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
-							{% endif %}
-						</div>
-							
-					</div>
-				</div>
-				
+	{% if page_obj %}
+		{% for product in page_obj %}
+		<div class="product-list-item shadow bg-white rounded">
+			<div class="product-image">
+				<img style=" height: 180px; width: auto;" src="{{product.get_image_url}}">
 				
 			</div>
-		</div>
+			<div class="container">
+				<div class="product-data">
+					<div class="product-data-item">
+						<h2>{{product.name|title}}</h2>
+						
+					</div>
+					<div class="product-data-item">
+						<p><a href="{% url 'home' category=product.category %}">{{product.category}}</a></p>
+					</div>
+					<div class="product-data-item">
+						<h2>${{product.price}}</h2>
+					</div>
+					
+					<div class="product-data-item">
+						<div class="product-footer " >
+							<div >
+								<br>
+								<p>{{product.availability}} left</p>
+							</div>
+							<div>
+								<p></p>
+							</div>
+							<div>
+								{% if user.is_authenticated %}
+									<button type="button" class="btn btn-outline-dark addbutton" data-productid="{{product.id}}">Add To Cart</button>
+								{% else %}
+									<button onclick="goToLoginPage()" type="button" class="btn btn-outline-dark addbutton" >Add To Cart</button>
+								{% endif %}
+								
+								{% if user.is_superuser %}
+									<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
+								{% endif %}
+							</div>
+								
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
 
-	</div>
-		
-	{% endfor %}
+		</div>
+			
+		{% endfor %}
+	{% else %}
+		<div class="product-list-item shadow bg-white rounded">
+			<div class="product-data-not-found">
+				Products not found
+			</div>
+		</div>
+	{% endif %}
 
 	<script type="text/javascript">
 		function goToLoginPage() {
