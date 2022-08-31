@@ -55,7 +55,8 @@ def AvailableItemsList(request, category=None, page=None):
 
 	#context['object_list'] = object_list 
 	paginator = Paginator(object_list, 3)
-
+	objects_count = object_list.count()
+	context['objects_count'] = objects_count
 	page_number = page
 	page_obj = paginator.get_page(page_number)
 	context['page_obj'] = page_obj

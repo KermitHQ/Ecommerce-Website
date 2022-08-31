@@ -120,6 +120,16 @@
 			align-items: flex-end;
 		}
 
+		.results-counter{
+			padding-right: 20px;
+			padding-top: 10px;
+			text-align: right;
+		}
+
+		.results-counter p{
+			font-size: 12px;
+		}
+
 		.hidden{
 			display: none;
 		}
@@ -220,7 +230,12 @@
 			</div>
 		</div>
 	{% endif %}
-
+	<div class="results-counter">
+		{% if objects_count > 0 %}
+			<p>Results: {{objects_count}}</p>
+		{% endif %}
+	</div>
+	
 	<script type="text/javascript">
 		function goToLoginPage() {
 			var url = "{% url 'login' %}"
@@ -270,13 +285,13 @@
 		    {% endif %}
 
 		    <li class="page-item active">
-		      <a class="page-link" href="#">{{page_obj.number}} <span class="sr-only">(current)</span></a>
+		      <a class="page-link" href="#">{{page_obj.number}} </a>
 		    </li>
 
 		    {% if page_obj.has_next %}
 		    <li class="page-item"><a class="page-link" href="{% url 'home-paginated' page_obj.next_page_number %}?{{request.GET.urlencode}}">	{{page_obj.next_page_number}}</a></li>
 		    <li class="page-item">
-		      <a class="page-link" href="{% url 'home-paginated' page_obj.next_page_number %}?{{request.GET.urlencode}}">Nextt</a>
+		      <a class="page-link" href="{% url 'home-paginated' page_obj.next_page_number %}?{{request.GET.urlencode}}">Next</a>
 		    </li>
 		    {% else %}
 		    <li class="page-item disabled">
