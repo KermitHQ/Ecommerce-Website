@@ -2,7 +2,6 @@
 
 {% load crispy_forms_tags %}
 {% block content %}
-<div id="alert-box"></div>
 
     <style type="text/css">
         .form-container {
@@ -34,6 +33,7 @@
 
     </style>
 
+<div id="alert-box"></div>
 
 <div class="form-container">
     <form action=""id="image-form">
@@ -54,11 +54,12 @@
         {% endfor %}
             
         <br>
-        <div class="button-container">
-            <button class="btn btn-primary mt-3 not-visible" id="confirm-btn">confirm</button>
-        </div>
+        
         
     </form>
+    <div class="button-container">
+        <button class="btn btn-primary mt-3 not-visible" id="confirm-btn">confirm</button>
+    </div>
 </div>
 
 <div id="image-box" class="mb-3"></div>

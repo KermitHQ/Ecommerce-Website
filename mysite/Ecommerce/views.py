@@ -157,6 +157,9 @@ def ProductCreateView(request):
 		else:
 			print("product form is not valid")
 			print(form.errors)
+	else:
+		print("form is not valid")
+		
 	context['form'] = form
 
 	form2 = PhotoForm()

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'Ecommerce',
     'Account',
     
+    'django_cleanup.apps.CleanupConfig',
     'crispy_forms',
 
     'django.contrib.admin',
@@ -136,10 +137,12 @@ LOGOUT_REDIRECT_URL = 'home'
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    
-]
+if DEBUG:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static')
+   ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

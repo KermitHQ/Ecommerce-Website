@@ -1,4 +1,3 @@
-
 const alertBox = document.getElementById('alert-box')
 
 const imageBox = document.getElementById('image-box')

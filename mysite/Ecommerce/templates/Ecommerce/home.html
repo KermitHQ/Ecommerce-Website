@@ -401,57 +401,54 @@
 		function check_priceRange() {
 			var a = $( "#slider-range" ).slider("values", 0);
 			var b = $( "#slider-range" ).slider("values", 1);
-			var link = "?price_from=a&price_to=b".replace("a", a).replace("b", b)
-			window.location.href = link
-			console.log(a)
-			console.log(b)
+			
+			var url = window.location.href
+			params = new URLSearchParams(window.location.search) // getting current params
+			console.log(params.toString()) // printing them out
+			
+
+			if(params.has("price_from")){  //changing params
+				params.delete("price_from")
+				params.set("price_from", a)
+			}
+			else{
+				params.set("price_from", a)
+			}
+
+			if(params.has("price_to")){
+				params.delete("price_to")
+				params.set("price_to", b)
+			}
+			else{
+				params.set("price_to", b)
+			}
+			
+			//console.log(params.toString())  // getting final url
+
+			window.location = window.location.pathname + "?"+params
 		}
 
 		function sort(reverse){
-			var partToReplace
-			var link = window.location.href
-			if((link).includes("sorted")){
-				console.log("already sorted")
-				
-
-				if((link).includes("sorted=normal")){
-					if(reverse==true){
-						var newLink = window.location.href.replace("sorted=normal", "sorted=reverse")
-						console.log(newLink)
-						window.location.href = newLink
-					}
+			var params = new URLSearchParams(window.location.search)
+			if(params.has("sorted")){
+				params.delete("sorted")
+				if(reverse==false){
+					params.set("sorted", "normal")
 				}
-				if((link).includes("sorted=reverse")){
-					if(reverse==false){
-						var newLink = window.location.href.replace("sorted=reverse", "sorted=normal")
-						console.log(newLink)
-						window.location.href = newLink
-					}
+				else{
+					params.set("sorted", "reverse")
 				}
-				
 			}
 			else{
 				if(reverse==false){
-					if((window.location.href).includes("?")){
-						var link = "&sorted=None".replace("None", "normal")
-						window.location.href += link
-						}
-					else{
-						var link = "?sorted=None".replace("None", "normal")
-						window.location.href = link
-					}
+					params.set("sorted", "normal")
 				}
 				else{
-					if((window.location.href).includes("?")){
-						var link = "&sorted=None".replace("None", "reverse")
-						window.location.href += link
-						}
-					else{
-						var link = "?sorted=None".replace("None", "reverse")
-						window.location.href = link
-					}
+					params.set("sorted", "reverse")
 				}
-			}	
+			}
+			window.location = window.location.pathname + "?"+params
+			
 		}
 	</script>
 
