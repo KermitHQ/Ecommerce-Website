@@ -1,14 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import Product, Category, Order, OrderItem, Photo
 from django.views.generic.list import ListView
 from .forms import ProductForm, CategoryForm, PhotoForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core.paginator import Paginator
+from .utils import HasActiveOrder
 
 
 @login_required
 def CartView(request):
+	
 	context = {}
 	order = Order.objects.get(user=request.user)
 	ordered_products = OrderItem.objects.filter(order=order)
@@ -21,7 +23,7 @@ def CartView(request):
 	for item in order.orderitem_set.all():
 		TOTAL_price += item.get_total_price()
 	
-	print(type(TOTAL_price))
+	
 	context['TOTAL'] = TOTAL_price
 	context['total_price'] = total_price
 	context['order'] = order
@@ -83,6 +85,7 @@ def deleteOrderItem(request, orderitem_id):
 		print("You are not allowed here")
 	return redirect('cart')
 
+
 @login_required
 def CategoryCreationView(request):
 	context = {}
@@ -98,10 +101,15 @@ def CategoryCreationView(request):
 
 @login_required
 def AddProduct(request):
+	
+	if HasActiveOrder(request.user):
+		print("You have at least one unpaid order")
+		return redirect('cart')
+	
+	
 	if request.method == 'GET':
 		product_id = request.GET['product_id']
 		product = Product.objects.get(id=product_id)
-
 		try:
 			order = Order.objects.get(user=request.user, is_active=True)
 		except Order.DoesNotExist:
@@ -143,6 +151,31 @@ def decreaseQuantity(request):
 				orderitem.save()
 			return JsonResponse({'count':orderitem.quantity})
 	return JsonResponse({'error':'error'})
+
+@login_required
+def makeOrder(request, order_id):
+	order = Order.objects.get(id=order_id)
+	if request.user == order.user:
+		order.is_active = False
+		order.made = True
+		order.save()
+		print("order has been made")
+	else:
+		print("You are not allowed here")
+	return redirect('cart')
+
+@login_required
+def cancelOrder(request, order_id):
+	order = Order.objects.get(id=order_id)
+	if request.user == order.user:
+		order.is_active = True
+		order.made = False
+		order.save()
+		print("order has been canceled")
+	else:
+		print("You are not allowed here")
+	return redirect('cart')
+
 
 @login_required
 def ProductCreateView(request):

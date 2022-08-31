@@ -1,5 +1,5 @@
 from .views import (ProductDeleteView, CategoryCreationView,AvailableItemsList,
-  CartView, AddProduct, increaseQuantity, decreaseQuantity,deleteOrderItem, ProductCreateView,
+  CartView, AddProduct, increaseQuantity, decreaseQuantity,deleteOrderItem, ProductCreateView, makeOrder, cancelOrder, 
 
 	)
 
@@ -20,6 +20,12 @@ urlpatterns = [
     path('cart/', CartView, name="cart"),
     path('cart/increase/', increaseQuantity, name='increase'),
     path('cart/decrease/', decreaseQuantity, name='decrease'),
+
+  
+
+    path('makeorder/<int:order_id>/', makeOrder, name='make-order'),
+    path('cancelorder/<int:order_id>/', cancelOrder, name='cancel-order'),
+
     path('cart/delete-orderitem/<int:orderitem_id>/', deleteOrderItem, name='delete-orderitem'),
 
 ]

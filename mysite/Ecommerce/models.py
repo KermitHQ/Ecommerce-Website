@@ -5,17 +5,37 @@ import os
 
 class Order(models.Model):
 	user = models.ForeignKey(Account, on_delete=models.CASCADE)
-	is_active = models.BooleanField(default=True)
+	is_active = models.BooleanField(default=True) # if can be editted by user
 	created = models.DateTimeField(auto_now_add=True)
+
+	made = models.BooleanField(default=False) # if has been made by user
+	paid = models.BooleanField(default=False) # if has beed paid by user
+	complete = models.BooleanField(default=False) # if has been completed by admin/service
 
 	def __str__(self):
 		return (" {} active {}" if self.is_active else "{} not active {}").format(self.user.username, self.id)
+
+	def getStatus(self):
+		if self.is_active:
+			return "active"
+		elif self.made:
+			return "made"
+		elif self.paid:
+			return "paid"
+		elif self.complete:
+			return "completed"
+		else:
+			return "Something went wrong"
+			
 
 class Category(models.Model):
 	name = models.CharField(max_length=200)
 
 	def __str__(self):
 		return self.name
+
+	def availableItems(self):
+		return Product.objects.filter(category=self).count()
 
 	
 def getImageURL(instance, filename):

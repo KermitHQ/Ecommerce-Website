@@ -15,10 +15,7 @@
 			padding-bottom: 20px;
 		}
 
-		.user-data p{
-			padding-bottom: 0;
-			margin-bottom: 0;
-		}
+		
 
 		.cost {
 			display: flex;
@@ -34,9 +31,11 @@
 		.order-data{
 			margin-top: 20px;
 			display: flex;
-			flex-direction: column;
+			flex-direction: row;
 			padding: 20px;
 			margin-bottom: 20px;
+			justify-content: space-between;
+
 		}
 
 		.product-quantity{
@@ -65,6 +64,27 @@
 			padding-right: 20px;
 		}
 
+		.filler{
+			flex: 2;
+		}
+
+		.buttons {
+			flex: 3;
+			align-self: flex-end;
+			align-content: flex-end;
+
+
+		}
+
+		.user-data p{
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+
+		.user-data{
+			flex: 1;
+		}
+
 
 	</style>
 
@@ -72,14 +92,34 @@
 
 	<div class="order-data shadow bg-white rounded">
 		<div>
-			<h2>Order #{{order.id}}</h2>
+			<div>
+				<h2>Order #{{order.id}}</h2>
+			</div>
+			<div class="user-data">
+				<p>Made By: {{order.user.username}}</p>
+				<p>Contact: {{order.user}}</p>
+				<p>Created: {{order.created|date:"d M Y - G:i"}}
+				<p>Items: {{ordered_products.count}}</p>
+				<p>Status: {{order.getStatus}}</p>
+			</div>
 		</div>
-		<div class="user-data">
-			<p>Made By: {{order.user.username}}</p>
-			<p>Contact: {{order.user}}</p>
-			<p>Created: {{order.created|date:"d M Y - G:i"}}
-			<p>Items: {{ordered_products.count}}</p>
+		<div class="filler">
+			<!--placeholder for data in the future -->
 		</div>
+		<div class="filler">
+			<!--placeholder for data in the future -->
+		</div>
+		{% if order.made == False %}
+			<div class="buttons">
+				<button onclick="MakeOrder({{order.id}})" type="button" class="btn btn-outline-primary">Make order</button>
+			</div>
+		{% else %}
+			<div class="buttons">
+				<button onclick="#" type="button" class="btn btn-outline-primary">Pay</button>
+				<button onclick="CancelOrder({{order.id}})" type="button" class="btn btn-outline-danger">Cancel</button>
+			</div>
+
+		{% endif %}
 	</div>
 
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -99,17 +139,19 @@
 						<div class="quantity" id="testing">
 							<p>Quantity: {{product.quantity}}</p>
 						</div>
-						<div class="change-quantity">
-							<form method="POST">
-								<a href="#"  data-orderItemId="{{product.id}}" class = "quantity-increase"><div >
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16"><path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/></svg>
-								</div>
-								</a>
+						{% if order.made == False %}
+							<div class="change-quantity">
+								<form method="POST">
+									<a href="#"  data-orderItemId="{{product.id}}" class = "quantity-increase"><div >
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16"><path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/></svg>
+									</div>
+									</a>
 
-								<a href="#" data-orderItemId="{{product.id}}" class = "quantity-decrease"><div ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg></div></a>
-							</form>
-							
-						</div>
+									<a href="#" data-orderItemId="{{product.id}}" class = "quantity-decrease"><div ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg></div></a>
+								</form>
+								
+							</div>
+						{% endif %}
 					</div>
 					
 				</div>
@@ -120,10 +162,11 @@
 					<div>
 						
 					</div>
+					{% if order.made == False %}
 					<div class="footer-item">
 						<button onclick="Delete({{product.id}})" type="button" class="btn btn-outline-danger">Delete</button>
 					</div>
-					
+					{% endif %}
 					
 				</div>
 			</div>
@@ -131,6 +174,23 @@
 	{% endfor %}
 
 	<script type="text/javascript">
+
+		function MakeOrder(order_id){
+			var url = "{% url 'make-order' order_id=0 %}".replace('0', order_id)
+			document.location.href= url
+		}
+
+		function CancelOrder(order_id){
+			var url = "{% url 'cancel-order' order_id=0 %}".replace('0', order_id)
+			document.location.href= url
+		}
+
+		function PaForTheOrder(order_id){
+			var url = "{% url 'make-order' order_id=0 %}".replace('0', order_id)
+			document.location.href= url
+		}
+
+
 
 		function Delete(orderitem_id){
 			if(confirm('Are you sure?')){

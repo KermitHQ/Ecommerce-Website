@@ -62,29 +62,70 @@
 		}
 
 		.left-sidebar {
+
 			display: flex;
 			flex-direction: column;
 			min-height: 100%;
 			padding: 0;
+			padding-top: 30px;
 		}
 
 		.category-list-item{
-			height: 30px;
-			text-align: left;
-			padding-left: 20px;
 			
+			display: flex;
+			flex-direction: row;
+			margin-top: 20px;
+			
+
+		}
+
+
+		
+
+		.category-list-item div{
+			width: 50%;
+		}
+
+		.category-list-name{
+			text-align: left;
+			
+			vertical-align: middle;
+		}
+
+		.category-list-name p{
+			font-size: 16px;
+			padding-left: 0;
+			margin-bottom: 0;
+			padding-left: 30%;
+			position: relative;
+			top: 50%;
+			-ms-transform: translateY(-50%);
+			-webkit-transform: translateY(-50%);
+			transform: translateY(-50%);
 			
 		}
 
-		.category-list-item	h2{
-			font-size: 	16px;
-			font-stretch: expanded;
-			font-weight:  Normal;
+
+		.category-list-products p{
+			font-size: 12px;
+			padding: 0;
+			margin-bottom: 0;
+			padding-right: 30%;
+			position: relative;
+			top: 50%;
+			-ms-transform: translateY(-50%);
+			-webkit-transform: translateY(-50%);
+			transform: translateY(-50%);
+			
 		}
+
+
+		
+		
 
 		.category-list-header{
 			height: 30px;
-			text-align: left;		
+			text-align: center;		
 			padding-left: 20px;
 		}
 
@@ -355,9 +396,14 @@
 		</div>
 		<div id="category-list" class="hidden">
 			{% for category in categories %}
-				<div class="category-list-item">
-					<h2><a href="{% url 'home' category=category.name %}">{{category.name}}</a></h2>
-				</div>
+				
+					<a href="{% url 'home' category=category.name %}">
+						<div class="category-list-item shadow-sm bg-white">
+							<div class="category-list-name"><p>{{category.name}}</p></div>
+							<div class="category-list-products"><p>available items {{category.availableItems}}</p></div>						
+						</div>
+					</a>
+				
 			{% endfor %}
 		</div>
 	
