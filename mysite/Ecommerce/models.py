@@ -17,22 +17,13 @@ class Category(models.Model):
 	def __str__(self):
 		return self.name
 
-def getFileNumber():
-	queryset = Product.objects.all().order_by('pk')
-	if queryset:
-		last_id = len(queryset)
-		file_number = last_id+1
-		return str(file_number)
-	else:
-		file_number=1
-		return str(file_number)
 	
 def getImageURL(instance, filename):
-	path = os.path.join("products_images/{}/product_image.png".format(getFileNumber()))
-	print(path)
+	path = os.path.join("products_images/{}/product_image.png".format(instance.product.id))
+	
 	if os.path.isfile("media/" + path):
 		print("image with this id already exist, ")
-		os.remove("media/" + path)
+		os.remove("media/products_images/{}".format(instance.product.id))
 		return path
 	else:
 		return path
@@ -50,28 +41,10 @@ class Product(models.Model):
 	def get_image_url(self):
 		return Photo.objects.get(product=self).file.url
 
-def getFileNumber2():
-	queryset = Photo.objects.all().order_by('pk')
-	if queryset:
-		last_id = len(queryset)
-		file_number = last_id+1
-		return str(file_number)
-	else:
-		file_number=1
-		return str(file_number)
-	
-def getImageURL2(instance, filename):
-	path = os.path.join("products_images/{}/product_image.png".format(getFileNumber2()))
-	print(path)
-	if os.path.isfile("media/" + path):
-		print("image with this id already exist, ")
-		os.remove("media/" + path)
-		return path
-	else:
-		return path
+
 
 class Photo(models.Model):
-	file = models.ImageField(upload_to=getImageURL2, default="static/default.png")
+	file = models.ImageField(upload_to=getImageURL, default="static/default.png")
 	uploaded = models.DateTimeField(auto_now_add=True)
 	product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
 
