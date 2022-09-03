@@ -20,7 +20,7 @@
   
 
     <!-- js -->
-    <script src="{% static 'js/dropdown.js' %}" defer></script>
+    
     
 
   	
@@ -97,6 +97,8 @@ ul {
 
 </style>
 
+<script src="{% static 'js/dropdown.js' %}" defer></script>
+
 <script type="text/javascript">
 	var menuStatus = false
 	function toggleAccountInfo(){
@@ -144,7 +146,7 @@ ul {
 							<ul>
 								<li>profile</li>
 								<a href="{% url 'logout' %}"><li>Logout</li></a>
-								<li>Orders</li>
+								<a href="{% url 'order-list' %}"><li>Orders</li></a>
 								<li>Test</li>
 							</ul>
 						</div>

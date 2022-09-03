@@ -26,6 +26,12 @@ class Order(models.Model):
 			return "completed"
 		else:
 			return "Something went wrong"
+
+	def getID(self):
+		return ("#{}{}{}{}{}".format(self.user.id, self.created.day, self.created.month, self.created.year, self.id))
+
+	def getItems(self):
+		return OrderItem.objects.filter(order=self)
 			
 
 class Category(models.Model):

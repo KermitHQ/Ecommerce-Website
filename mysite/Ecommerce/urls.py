@@ -1,5 +1,5 @@
 from .views import (ProductDeleteView, CategoryCreationView,AvailableItemsList,
-  CartView, AddProduct, increaseQuantity, decreaseQuantity,deleteOrderItem, ProductCreateView, makeOrder, cancelOrder, 
+  CartView, AddProduct, increaseQuantity, decreaseQuantity,deleteOrderItem, ProductCreateView, makeOrder, cancelOrder, OrderListView,
 
 	)
 
@@ -10,6 +10,12 @@ urlpatterns = [
     path('<int:page>', AvailableItemsList, name="home-paginated"),
     path('', AvailableItemsList, name="home"),
     path('category/<str:category>/', AvailableItemsList, name="home"),
+
+
+
+    path('orders/', OrderListView, name="order-list"),
+
+
    
     path('create_product/',  ProductCreateView, name="create-new-product"),
     path('create_category/', CategoryCreationView, name="create-category"),

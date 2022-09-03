@@ -12,22 +12,34 @@ from .utils import HasActiveOrder, HasMadeOrder
 def CartView(request):
 	
 	context = {}
-	order = Order.objects.get(user=request.user)
-	ordered_products = OrderItem.objects.filter(order=order)
-	
-	total_price = 0
-	for product in ordered_products:
-		total_price += product.get_total_price()
+	order = None
 
-	TOTAL_price = 0
-	for item in order.orderitem_set.all():
-		TOTAL_price += item.get_total_price()
+	try:
+		order = Order.objects.get(user=request.user, is_active=True)
+	except:
+		pass
+	
+	try:
+		order = Order.objects.get(user=request.user, made=True)
+	except:
+		pass
+
+	if order:
+		ordered_products = OrderItem.objects.filter(order=order)
+	
+		total_price = 0
+		for product in ordered_products:
+			total_price += product.get_total_price()
+
+		TOTAL_price = 0
+		for item in order.orderitem_set.all():
+			TOTAL_price += item.get_total_price()
 	
 	
-	context['TOTAL'] = TOTAL_price
-	context['total_price'] = total_price
-	context['order'] = order
-	context['ordered_products'] = ordered_products
+		context['TOTAL'] = TOTAL_price
+		context['total_price'] = total_price
+		context['order'] = order
+		context['ordered_products'] = ordered_products
 	return render(request, "Ecommerce/cart.html", context)
 
 
@@ -104,9 +116,7 @@ def AddProduct(request):
 	
 	if HasMadeOrder(request.user):
 		print("You have at least one unpaid order")
-		return JsonResponse({'error':'error'})
-		
-	
+		return JsonResponse({'error':'error'})	
 	
 	if request.method == 'GET':
 		product_id = request.GET['product_id']
@@ -212,4 +222,12 @@ def ProductCreateView(request):
 	return render(request, "Ecommerce/create_product.html", context)
 
 
+@login_required
+def OrderListView(request):
+	context = {}
+	user = request.user
+	orders = Order.objects.filter(user=user)
+	context['orders'] = orders
+
+	return render(request, "Ecommerce/orders.html", context) 
 
