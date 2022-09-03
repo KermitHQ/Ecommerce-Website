@@ -12,25 +12,25 @@
 		}
 
 		.order {
-			border: 1px solid black;
 			
+			margin-bottom: 32px;
 			display: flex;
 			flex-direction: row;
 		}
 
 		.order > .order-side{
 			flex: 1;
-			border: 1px solid blue;
+			
 		}
 
 		.order > .order-main{
 			flex: 3;
-			border: 1px solid blue;
+			
 		}
 
 
 		.title {
-			border: 1px solid black;
+			
 			text-align: center;
 			padding: 1rem;
 		}
@@ -43,24 +43,61 @@
 			font-size: 24px;
 		}
 		
+
+		.order-total{
+			text-align: center;
+		}
+
+		.order-total h3{
+			font-size: 16px;
+		}
+
+
 		.order-item{
 			min-height: 64px;
-			border: 1 px solid red;
+			
 			padding-bottom: 10px;
+			position: relative;
+			margin-top: 16px;
+		}
+
+		.order-item-img{
+			position: absolute;
+			width: 64px;
+			height: 64px;
+			margin-right: 0;
+			padding: 0;
+			left: 0;
+		}
+
+		.order-item-data{
+			
+			margin-left: 64px;
+			padding-left: 12px;
+			
+			height: 64px;
 
 			display: flex;
-			flex-direction: row;
+			flex-direction: column;
+		}
 
+		.order-item-data p {
+			font-size: 12px;
 		}
 
 		.order-item img{
 			height: 64px;
 		}
 
+		.data-part{
+			height: 20px;
+			margin-bottom: 2px;
+		}
+		
 
 	</style>
 
-	<div class="user-data shadow bg-white rounded">
+	<div class="user-data ">
 		<div class="title">
 			<h2>Orders</h2>
 		</div>
@@ -70,17 +107,25 @@
 				<div class="order-side"></div>
 				<div class="order-main">
 					<div class="order-title">
-						<h2>{{order.getID}}</h1>
+						<h2>{{order.getID}}</h2>
 					</div>
 					
 					{% if order.getItems %}
 						{% for item in order.getItems %}
-							<div class="order-item">
-								<div>
+							<div class="order-item shadow-sm bg-white rounded">
+								<div class="order-item-img">
 									<img src="{{item.item.get_image_url}}">
 								</div>
-								<div>
-									<p>{{item.item}} x{{item.quantity}}</p>
+								<div class="order-item-data">
+									<div class="data-part">
+										<p>{{item.item.name}}</p>
+									</div >
+									<div class="data-part">
+										<p>x{{item.quantity}}</p>
+									</div>
+									<div class="data-part">
+										<p>${{item.get_total_price}}</p>
+									</div>
 								</div>
 							</div>
 						{% endfor %}
@@ -90,13 +135,14 @@
 						</div>
 					{% endif %}
 
+					<div class="order-total">
+						<h3>Total Price: ${{order.getTotal}}</h3>
+					</div>
+
 				</div>
 				<div class="order-side"></div>
 				
 			</div>
 		{% endfor %}
-
-
-		
 	</div>
 {% endblock content %}

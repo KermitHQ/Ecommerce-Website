@@ -32,6 +32,14 @@ class Order(models.Model):
 
 	def getItems(self):
 		return OrderItem.objects.filter(order=self)
+
+	def getTotal(self):
+		total = 0
+		items = self.getItems()
+		for item in items:
+			total += item.get_total_price()
+		
+		return total
 			
 
 class Category(models.Model):
