@@ -5,7 +5,7 @@ from .forms import ProductForm, CategoryForm, PhotoForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-from .utils import HasActiveOrder
+from .utils import HasActiveOrder, HasMadeOrder
 
 
 @login_required
@@ -102,9 +102,10 @@ def CategoryCreationView(request):
 @login_required
 def AddProduct(request):
 	
-	if HasActiveOrder(request.user):
+	if HasMadeOrder(request.user):
 		print("You have at least one unpaid order")
-		return redirect('cart')
+		return JsonResponse({'error':'error'})
+		
 	
 	
 	if request.method == 'GET':

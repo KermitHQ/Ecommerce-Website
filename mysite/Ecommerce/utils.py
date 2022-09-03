@@ -9,3 +9,12 @@ def HasActiveOrder(user):
 
 	if order:
 		return True
+
+def HasMadeOrder(user):
+	try:
+		order = Order.objects.get(user=user, made=True)
+	except:
+		return False
+
+	if order:
+		return True

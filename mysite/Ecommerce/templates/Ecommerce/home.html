@@ -277,33 +277,7 @@
 		{% endif %}
 	</div>
 	
-	<script type="text/javascript">
-		function goToLoginPage() {
-			var url = "{% url 'login' %}"
-			document.location.href= url
-		}
-
-		function Delete(product_id){
-			if(confirm('Are you sure?')){
-				var url = "{% url 'delete-product' product_id=0 %}".replace('0', product_id)
-				document.location.href= url
-			}
-		}
-
-		$('.addbutton').click(function(){
-			var productid;
-			productid = $(this).attr("data-productid");
-			$.ajax(
-			{
-				type:"GET",
-				url: "addproduct",
-				data:{
-					product_id:productid
-				},
-				
-			})
-		})
-	</script>
+	
 
 	
 
@@ -344,39 +318,84 @@
 		</nav>
 		
 	</div>
+	<div id="home-alert-box">
 
+	</div>
+
+	<script type="text/javascript">
+		var HomeAlertBox = document.getElementById('home-alert-box')
+		
+
+		function goToLoginPage() {
+			var url = "{% url 'login' %}"
+			document.location.href= url
+		}
+
+		function Delete(product_id){
+			if(confirm('Are you sure?')){
+				var url = "{% url 'delete-product' product_id=0 %}".replace('0', product_id)
+				document.location.href= url
+			}
+		}
+
+		
+
+		$('.addbutton').click(function(){
+			var productid
+			productid = $(this).attr("data-productid");
+			$.ajax({
+				type:"GET",
+				url: "addproduct",
+				data:{
+					product_id:productid
+				},
+				success: function(response){
+                    if(!response['error']){
+                    	console.log(response)
+	                   
+	                    HomeAlertBox.innerHTML = `<div class="alert alert-success" role="alert">Successfully added to cart </div>` 
+
+	                    setTimeout(() => {
+						  HomeAlertBox.innerHTML = "";
+						}, 1000);
+                    }
+                    else{
+                    	console.log(response)
+	                    
+	                    HomeAlertBox.innerHTML = `<div class="alert alert-danger" role="alert"> You have at least one unpaid order</div>`
+
+	                    setTimeout(() => {
+						  HomeAlertBox.innerHTML = "";
+						}, 1000);
+                    }
+                    
+
+                         
+                },
+                error: function(error){
+                    console.log('error')
+                    HomeAlertBox.innerHTML = 
+
+                    setTimeout(() => {
+					  HomeAlertBox.innerHTML = "";
+					}, 1000);
+				}
+			})
+		
+		})
+
+	</script>
 	
 	
 {% endblock content %}
 
 {% block sidebar %}
 	<div class="r-sidebar">
-		{% if user.is_authenticated and user.is_superuser %}
-		<div id="add-product-button">
-			<button onclick="CreateProduct()" type="button" class="btn btn-outline-danger">Create new Product</button>	
-		</div>
-
-		<div>
-			<button onclick="CreateCategory()" type="button" class="btn btn-outline-danger">Create new Category</button>	
-		</div>
-
-		{% endif %}
+		
 	</div>
 	
 	
-	<script type="text/javascript">
-		function CreateProduct(){ //create-product
-			var newUrl = "{% url 'create-new-product' %}"
-			document.location.href= newUrl
-		}
-
-		function CreateCategory(){ //create-product
-			var newUrl = "{% url 'create-category' %}"
-			document.location.href= newUrl
-		}
-		
-		
-	</script>
+	
 {% endblock sidebar %}
 
 {% block leftsidebar %}

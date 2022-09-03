@@ -89,6 +89,10 @@ ul {
     padding-bottom: 10px;
 }
 
+.alert-box {
+	min-height: 60px;
+}
+
 
 
 </style>
@@ -140,7 +144,7 @@ ul {
 							<ul>
 								<li>profile</li>
 								<a href="{% url 'logout' %}"><li>Logout</li></a>
-								<li>Test</li>
+								<li>Orders</li>
 								<li>Test</li>
 							</ul>
 						</div>
@@ -184,13 +188,5 @@ ul {
 		
 </body>
 
-<script type="text/javascript">
-	function toggleAccountInfo(){
-		var items = document.getElementsByClassName('dropdown-item')
-		for(int i = 0; i<items.length; i++){
-			console.log("aa")
-		}
-	}
 
-</script>
 </html>
