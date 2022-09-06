@@ -200,7 +200,9 @@
 		}
 		
 
-		$('.quantity-increase').click(function(){
+		$('.quantity-increase').click(function(e){
+			e.preventDefault();
+
 		    var orderItemId;
 		    orderItemId = $(this).attr("data-orderItemId"); //data-orderItemId is attributte set in <a>
  			var ProducData = $(this)[0].parentElement.parentElement.parentElement.parentElement
@@ -246,7 +248,10 @@
 		    })
 		})
 
-		$('.quantity-decrease').click(function(){
+		$('.quantity-decrease').click(function(e){
+			e.preventDefault();
+
+			
 		    var orderItemId;
 		    orderItemId = $(this).attr("data-orderItemId"); //data-orderItemId is attributte set in <a>
  			var ProducData = $(this)[0].parentElement.parentElement.parentElement.parentElement
